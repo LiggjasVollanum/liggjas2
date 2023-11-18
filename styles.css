@@ -1,0 +1,48 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #fff; /* Keeps the main body background white */
+    color: #000; /* Text color for the body */
+}
+
+header, footer /* Add side bar class here if you have one */ {
+    background: linear-gradient(to right, #00008B, #000060); /* Gradient from dark blue to darker blue */
+    color: #fff;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: #fff; /* White text color for links in the header */
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+    background-color: #fff; /* Ensures the main content area is white */
+}
+
+footer {
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    nav ul {
+        text-align: center;
+    }
+    nav ul li {
+        display: block;
+        margin-bottom: 5px;
+    }
+}
