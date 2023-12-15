@@ -1,9 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>eg keypti eitt domain bara fyri at siga at Samuel er GAY</title>
+    <title>Click the Box Game</title>
+    <style>
+        #gameBox {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background-color: blue;
+        }
+    </style>
 </head>
 <body>
-    <h1>Samuel er gay</h1>
+    <div id="gameBox"></div>
+    <p>Score: <span id="score">0</span></p>
+    <script>
+        let score = 0;
+        const gameBox = document.getElementById('gameBox');
+        const scoreDisplay = document.getElementById('score');
+        let speed = 1000;
+
+        gameBox.addEventListener('click', function() {
+            score++;
+            scoreDisplay.textContent = score;
+            moveBox();
+            if (score % 5 === 0) speed *= 0.9;
+        });
+
+        function moveBox() {
+            const x = Math.random() * (window.innerWidth - 50);
+            const y = Math.random() * (window.innerHeight - 50);
+            gameBox.style.left = x + 'px';
+            gameBox.style.top = y + 'px';
+        }
+
+        setInterval(moveBox, speed);
+    </script>
 </body>
 </html>
