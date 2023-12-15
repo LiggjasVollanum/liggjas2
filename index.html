@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Click the Box Game</title>
+    <title>Smooth Moving Box Game</title>
     <style>
         #gameBox {
             width: 50px;
             height: 50px;
             position: absolute;
             background-color: blue;
+            transition: all 1s ease;
         }
     </style>
 </head>
@@ -21,10 +22,10 @@
         let speed = 1000;
 
         gameBox.addEventListener('click', function() {
-            score++;
+            score += 69;
             scoreDisplay.textContent = score;
             moveBox();
-            if (score % 5 === 0) speed *= 0.9;
+            if (score % (5 * 69) === 0) speed *= 0.9;
         });
 
         function moveBox() {
@@ -34,7 +35,12 @@
             gameBox.style.top = y + 'px';
         }
 
-        setInterval(moveBox, speed);
+        function updatePosition() {
+            moveBox();
+            setTimeout(updatePosition, speed);
+        }
+
+        updatePosition();
     </script>
 </body>
 </html>
