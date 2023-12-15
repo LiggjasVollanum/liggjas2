@@ -1,46 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Smooth Moving Box Game</title>
+    <title>Hangman Game</title>
     <style>
-        #gameBox {
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            background-color: blue;
-            transition: all 1s ease;
+        #hangman {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .letter {
+            display: inline-block;
+            width: 20px;
+            margin: 5px;
+            border-bottom: 2px solid black;
+        }
+        #wrongGuesses {
+            color: red;
+        }
+        #message {
+            font-size: 24px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div id="gameBox"></div>
-    <p>Score: <span id="score">0</span></p>
+    <div id="hangman">
+        <div id="word"></div>
+        <div id="wrongGuesses"></div>
+        <div id="message"></div>
+        <button onclick="startGame()">Start New Game</button>
+    </div>
+
     <script>
-        let score = 0;
-        const gameBox = document.getElementById('gameBox');
-        const scoreDisplay = document.getElementById('score');
-        let speed = 1000;
+        const words = ["sophisticated", "hangman", "randomized", "animation"];
+        let selectedWord, correctGuesses, wrongGuesses, maxWrongGuesses;
 
-        gameBox.addEventListener('click', function() {
-            score += 69;
-            scoreDisplay.textContent = score;
-            moveBox();
-            if (score % (5 * 69) === 0) speed *= 0.9;
-        });
-
-        function moveBox() {
-            const x = Math.random() * (window.innerWidth - 50);
-            const y = Math.random() * (window.innerHeight - 50);
-            gameBox.style.left = x + 'px';
-            gameBox.style.top = y + 'px';
+        function startGame() {
+            selectedWord = words[Math.floor(Math.random() * words.length)];
+            correctGuesses = new Set();
+            wrongGuesses = new Set();
+            maxWrongGuesses = 7;
+            document.getElementById('word').innerHTML = '_ '.repeat(selectedWord.length);
+            document.getElementById('wrongGuesses').textContent = '';
+            document.getElementById('message').textContent = '';
+            document.onkeypress = handleKeyPress;
         }
 
-        function updatePosition() {
-            moveBox();
-            setTimeout(updatePosition, speed);
+        function handleKeyPress(e) {
+            let letter = e.key.toLowerCase();
+            if (selectedWord.includes(letter)) {
+                correctGuesses.add(letter);
+                updateWordDisplay();
+            } else {
+                wrongGuesses.add(letter);
+                document.getElementById('wrongGuesses').textContent = Array.from(wrongGuesses).join(', ');
+            }
+            checkGameStatus();
         }
 
-        updatePosition();
+        function updateWordDisplay() {
+            let display = selectedWord.split('').map(letter => correctGuesses.has(letter) ? letter : '_').join(' ');
+            document.getElementById('word').textContent = display;
+        }
+
+        function checkGameStatus() {
+            if (Array.from(correctGuesses).length === new Set(selectedWord).size) {
+                document.getElementById('message').textContent = "You Win!";
+                document.onkeypress = null;
+            } else if (wrongGuesses.size >= maxWrongGuesses) {
+                document.getElementById('message').textContent = "Game Over!";
+                document.onkeypress = null;
+            }
+        }
+
+        startGame();
     </script>
 </body>
 </html>
