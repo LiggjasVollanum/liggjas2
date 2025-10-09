@@ -1,1 +1,292 @@
-het
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Site · Work in Progress</title>
+  <meta name="description" content="Temporary landing page while the real site is cooking." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0e14;
+      --bg-soft: #0f1420;
+      --text: #e8ecf1;
+      --muted: #a7b0c0;
+      --card: rgba(255,255,255,.06);
+      --ring: 255, 255, 255;
+      --primary: 140 100% 65%; /* hsl */
+      --accent1: #8a5cff;
+      --accent2: #36e4da;
+      --accent3: #ffc95e;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    [data-theme="light"]{
+      --bg: #f6f8fb;
+      --bg-soft: #ffffff;
+      --text: #0b1220;
+      --muted: #5b6372;
+      --card: rgba(0,0,0,.05);
+      --ring: 0, 0, 0;
+    }
+    html,body{height:100%}
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text); background: var(--bg); overflow-x:hidden;
+    }
+    /* Animated gradient backdrop */
+    .backdrop{
+      position: fixed; inset: -20vmax; z-index:-2; filter: blur(60px) saturate(1.2); opacity:.8; pointer-events:none;
+      background: radial-gradient(40vmax 40vmax at 15% 20%, #5b7cfa 0%, transparent 60%),
+                  radial-gradient(45vmax 45vmax at 85% -5%, var(--accent2) 0%, transparent 60%),
+                  radial-gradient(35vmax 35vmax at 80% 80%, var(--accent3) 0%, transparent 60%);
+      animation: float 18s ease-in-out infinite alternate;
+    }
+    @keyframes float { from { transform: translate(-2%, 1%) rotate(0.6deg); } to { transform: translate(3%, -2%) rotate(-0.6deg);} }
+
+    .container{ width:min(1120px, 92vw); margin:0 auto; }
+    header{
+      position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px);
+      background: color-mix(in oklab, var(--bg), transparent 70%);
+      border-bottom: 1px solid color-mix(in oklab, var(--text), transparent 92%);
+      z-index: 10;
+    }
+    .nav{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px;
+    }
+    .brand .logo{
+      width:36px; height:36px; border-radius:12px; background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: var(--shadow);
+    }
+    .nav a{ color:var(--text); text-decoration:none; font-weight:600; opacity:.9; }
+    .nav .links{ display:flex; gap:22px; align-items:center; }
+    .btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:14px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent1)); color:#0a0a0a; font-weight:800; border:none; cursor:pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      transition: transform .14s ease, filter .2s ease;
+    }
+    .btn:hover{ transform: translateY(-2px); filter: saturate(1.1); }
+    .ghost{ background: transparent; color: var(--text); border: 1px solid color-mix(in oklab, var(--text), transparent 80%); }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; font-size:12px; letter-spacing:.3px; font-weight:700;
+      background: color-mix(in oklab, var(--text), transparent 90%);
+      color: color-mix(in oklab, var(--text), black 40%);
+      border: 1px solid color-mix(in oklab, var(--text), transparent 85%);
+    }
+
+    .hero{ padding: 86px 0 48px; text-align:center; position:relative; }
+    .hero h1{ font-family: "Space Grotesk", Inter, system-ui; font-size: clamp(36px, 6vw, 64px); line-height:1.02; margin: 16px 0 14px; }
+    .hero p{ margin: 0 auto; max-width: 800px; color: var(--muted); font-size: clamp(16px, 2.2vw, 18px); }
+    .cta{ margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    .cards{ display:grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin: 48px 0 12px; }
+    .card{ grid-column: span 4; background: var(--card); border:1px solid color-mix(in oklab, var(--text), transparent 88%);
+      border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+    }
+    .card h3{ margin: 8px 0 6px; font-size: 18px }
+    .card p{ color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .card .tag{ font-size: 12px; opacity: .8 }
+    .card .mark{ font-weight:800; background: linear-gradient(90deg, var(--accent2), var(--accent1));
+      -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    @media (max-width: 960px){ .card{ grid-column: span 6 } }
+    @media (max-width: 640px){ .card{ grid-column: 1 / -1 } }
+
+    .section{ padding: 54px 0; }
+
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:16px }
+    .panel{ grid-column: span 6; background: var(--card); border:1px solid color-mix(in oklab, var(--text), transparent 88%);
+      border-radius: var(--radius); padding: 24px; }
+    @media (max-width: 960px){ .panel{ grid-column: 1 / -1 } }
+
+    .gallery{ display:grid; grid-template-columns: repeat(12, 1fr); gap:10px; }
+    .shot{ grid-column: span 3; aspect-ratio: 4/3; border-radius: 16px; overflow:hidden; position:relative;
+      background: linear-gradient(135deg, color-mix(in oklab, var(--text), transparent 85%), transparent),
+                  linear-gradient(135deg, var(--accent3), var(--accent2));
+      border: 1px solid color-mix(in oklab, var(--text), transparent 85%);
+    }
+    .shot::after{ content: "coming soon"; position:absolute; inset:auto 8px 8px auto; font-size:11px; letter-spacing:.2px; padding:6px 8px;
+      border-radius:10px; background: color-mix(in oklab, var(--text), transparent 90%); color: var(--muted); }
+
+    .marquee{ --gap: 36px; display:flex; gap:var(--gap); overflow:hidden; mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+      padding: 10px 0; border-top: 1px solid color-mix(in oklab, var(--text), transparent 90%);
+      border-bottom: 1px solid color-mix(in oklab, var(--text), transparent 90%);
+    }
+    .marquee ul{ display:flex; gap:var(--gap); list-style:none; padding:0; margin:0; animation: scroll 28s linear infinite; }
+    .marquee li{ opacity:.8; font-weight:700; letter-spacing:.4px; color: var(--muted) }
+    @keyframes scroll { to { transform: translateX(calc(-50% - var(--gap))); } }
+
+    .footer{ padding: 48px 0 80px; color: var(--muted); font-size:14px; text-align:center; }
+    .footer a{ color:inherit; text-decoration:none; border-bottom:1px dashed color-mix(in oklab, var(--text), transparent 70%); }
+
+    /* Tiny helper classes */
+    .center{ display:flex; justify-content:center; align-items:center; }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  </style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>yourbrand<span style="opacity:.5">.site</span></span>
+      </div>
+      <nav class="links" aria-label="primary">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+        <button class="btn ghost" id="themeToggle" aria-label="Toggle theme">☀︎/☾</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <span class="pill">🚧 WIP — Beautiful things are loading</span>
+      <h1>Something <span style="background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent">richiebeast</span> is coming soon</h1>
+      <p>This is a clean, fast, and temporary home while the full experience ships. Drop by again shortly — or leave your email and we’ll ping you the moment it’s live.</p>
+      <div class="cta">
+        <a class="btn" href="#notify">Notify me</a>
+        <a class="btn ghost" href="#work">Preview work</a>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <span class="tag">🚀 Sneak peek</span>
+          <h3>Lightning‑fast stack</h3>
+          <p>Built with modern standards, accessibility first, and SEO‑ready markup. No bloat, just the good parts.</p>
+        </article>
+        <article class="card">
+          <span class="tag">🎨 Aesthetic</span>
+          <h3>Delightful visuals</h3>
+          <p>Soft glass panels, subtle motion, and a gradient glow that feels <span class="mark">alive</span>.</p>
+        </article>
+        <article class="card">
+          <span class="tag">🧭 Structure</span>
+          <h3>Clear navigation</h3>
+          <p>Simple sections that you can rename later: About, Work, and Contact. Swap content in seconds.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section container">
+      <div class="grid">
+        <div class="panel">
+          <h2>About the project</h2>
+          <p style="color:var(--muted)">Short blurb you can edit later. Outline what you do, who you help, and why it matters. Keep it crisp; link to your best work.</p>
+          <ul>
+            <li>⚡ Mission: one sentence promise.</li>
+            <li>🧰 Services: 3–5 pillars.</li>
+            <li>🏆 Proof: one standout result.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h2 id="notify">Get notified</h2>
+          <p style="color:var(--muted)">Leave your email; we’ll send one message when everything goes live. No spam, ever.</p>
+          <form class="center" onsubmit="event.preventDefault(); document.getElementById('thanks').hidden=false; this.reset();">
+            <label class="sr-only" for="email">Email</label>
+            <input id="email" type="email" required placeholder="you@example.com" style="width:100%; max-width:460px; padding:14px 16px; border-radius:14px; border:1px solid color-mix(in oklab, var(--text), transparent 80%); background: var(--bg-soft); color:var(--text); outline: none;" />
+            <button class="btn" style="margin-left:10px">Send</button>
+          </form>
+          <p id="thanks" hidden aria-live="polite" style="margin-top:10px;color:var(--muted)">Thanks! You’re on the list.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="section container">
+      <h2 style="margin:0 0 14px">Work preview</h2>
+      <p style="color:var(--muted); margin:0 0 18px">Drop a few screenshots or placeholders here. Swap images later without touching layout.</p>
+      <div class="gallery" aria-label="gallery">
+        <div class="shot"></div>
+        <div class="shot"></div>
+        <div class="shot"></div>
+        <div class="shot"></div>
+        <div class="shot"></div>
+        <div class="shot"></div>
+        <div class="shot"></div>
+        <div class="shot"></div>
+      </div>
+    </section>
+
+    <section id="contact" class="section container">
+      <div class="grid">
+        <div class="panel">
+          <h2>Contact</h2>
+          <p style="color:var(--muted)">Prefer email? <a href="mailto:hello@example.com" style="color:inherit;text-decoration:underline">hello@example.com</a>. Add social links below.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px">
+            <a class="pill" href="#">Twitter</a>
+            <a class="pill" href="#">LinkedIn</a>
+            <a class="pill" href="#">GitHub</a>
+            <a class="pill" href="#">YouTube</a>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>FAQ</h2>
+          <details open>
+            <summary><strong>When will the full site be ready?</strong></summary>
+            <p style="color:var(--muted)">Soon. This index page is a polished placeholder you can safely share meanwhile.</p>
+          </details>
+          <details>
+            <summary><strong>Can I customize colors?</strong></summary>
+            <p style="color:var(--muted)">Yes—tweak the <code>:root</code> variables or switch between light/dark using the toggle.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <ul>
+        <li>• Minimal •</li>
+        <li>• Fast •</li>
+        <li>• Responsive •</li>
+        <li>• Accessible •</li>
+        <li>• Aesthetic •</li>
+        <li>• Minimal •</li>
+        <li>• Fast •</li>
+        <li>• Responsive •</li>
+        <li>• Accessible •</li>
+        <li>• Aesthetic •</li>
+      </ul>
+      <ul aria-hidden="true">
+        <li>• Minimal •</li>
+        <li>• Fast •</li>
+        <li>• Responsive •</li>
+        <li>• Accessible •</li>
+        <li>• Aesthetic •</li>
+        <li>• Minimal •</li>
+        <li>• Fast •</li>
+        <li>• Responsive •</li>
+        <li>• Accessible •</li>
+        <li>• Aesthetic •</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div>© <span id="year"></span> Your Brand — All rights reserved.</div>
+      <div style="margin-top:6px">This is a temporary index page. Replace content as you go.</div>
+    </div>
+  </footer>
+
+  <script>
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // theme toggle w/ persistence
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved){ root.setAttribute('data-theme', saved); }
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  </script>
+</body>
+</html>
