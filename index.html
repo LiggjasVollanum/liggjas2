@@ -1,328 +1,635 @@
-<!doctype html>
-<html lang="en" data-theme="dark">
+<!DOCTYPE html>
+<html lang="fo">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site · Work in Progress</title>
-  <meta name="description" content="Temporary landing page while the real site is cooking." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fjallaprædikan</title>
   <style>
     :root{
-      --bg: #0b0e14;
-      --bg-soft: #0f1420;
-      --text: #e8ecf1;
-      --muted: #a7b0c0;
-      --card: rgba(255,255,255,.06);
-      --ring: 255, 255, 255;
-      --primary: 140 100% 65%; /* hsl */
-      --accent1: #8a5cff;
-      --accent2: #36e4da;
-      --accent3: #ffc95e;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 18px;
-    }
-    [data-theme="light"]{
-      --bg: #f6f8fb;
-      --bg-soft: #ffffff;
-      --text: #0b1220;
-      --muted: #5b6372;
-      --card: rgba(0,0,0,.05);
-      --ring: 0, 0, 0;
-    }
-    html,body{height:100%}
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text); background: var(--bg); overflow-x:hidden;
-    }
-    /* Animated gradient backdrop */
-    .backdrop{
-      position: fixed; inset: -20vmax; z-index:-2; filter: blur(60px) saturate(1.2); opacity:.8; pointer-events:none;
-      background: radial-gradient(40vmax 40vmax at 15% 20%, #5b7cfa 0%, transparent 60%),
-                  radial-gradient(45vmax 45vmax at 85% -5%, var(--accent2) 0%, transparent 60%),
-                  radial-gradient(35vmax 35vmax at 80% 80%, var(--accent3) 0%, transparent 60%);
-      animation: float 18s ease-in-out infinite alternate;
-    }
-    @keyframes float { from { transform: translate(-2%, 1%) rotate(0.6deg); } to { transform: translate(3%, -2%) rotate(-0.6deg);} }
-
-    .container{ width:min(1120px, 92vw); margin:0 auto; }
-    header{
-      position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px);
-      background: color-mix(in oklab, var(--bg), transparent 70%);
-      border-bottom: 1px solid color-mix(in oklab, var(--text), transparent 92%);
-      z-index: 10;
-    }
-    .nav{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; }
-    .brand{
-      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px;
-    }
-    .brand .logo{
-      width:36px; height:36px; border-radius:12px; background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      box-shadow: var(--shadow);
-    }
-    .nav a{ color:var(--text); text-decoration:none; font-weight:600; opacity:.9; }
-    .nav .links{ display:flex; gap:22px; align-items:center; }
-    .btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:14px;
-      background: linear-gradient(135deg, var(--accent2), var(--accent1)); color:#0a0a0a; font-weight:800; border:none; cursor:pointer;
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      transition: transform .14s ease, filter .2s ease;
-    }
-    .btn:hover{ transform: translateY(-2px); filter: saturate(1.1); }
-    .ghost{ background: transparent; color: var(--text); border: 1px solid color-mix(in oklab, var(--text), transparent 80%); }
-
-    .pill{
-      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; font-size:12px; letter-spacing:.3px; font-weight:700;
-      background: color-mix(in oklab, var(--text), transparent 90%);
-      color: color-mix(in oklab, var(--text), black 40%);
-      border: 1px solid color-mix(in oklab, var(--text), transparent 85%);
+      --bg1: #0f172a;
+      --bg2: #111827;
+      --card: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.12);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --wrong: #ef4444;
+      --accent: #38bdf8;
+      --accent2: #22c55e;
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
     }
 
-    .hero{ padding: 86px 0 48px; text-align:center; position:relative; }
-    .hero h1{ font-family: "Space Grotesk", Inter, system-ui; font-size: clamp(36px, 6vw, 64px); line-height:1.02; margin: 16px 0 14px; }
-    .hero p{ margin: 0 auto; max-width: 800px; color: var(--muted); font-size: clamp(16px, 2.2vw, 18px); }
-    .cta{ margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    * { box-sizing: border-box; }
 
-    .cards{ display:grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin: 48px 0 12px; }
-    .card{ grid-column: span 4; background: var(--card); border:1px solid color-mix(in oklab, var(--text), transparent 88%);
-      border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(56,189,248,0.12), transparent 60%),
+        radial-gradient(900px 700px at 90% 90%, rgba(34,197,94,0.10), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display: grid;
+      place-items: center;
+      padding: 24px;
     }
-    .card h3{ margin: 8px 0 6px; font-size: 18px }
-    .card p{ color: var(--muted); font-size: 14px; line-height: 1.55; }
-    .card .tag{ font-size: 12px; opacity: .8 }
-    .card .mark{ font-weight:800; background: linear-gradient(90deg, var(--accent2), var(--accent1));
-      -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-    @media (max-width: 960px){ .card{ grid-column: span 6 } }
-    @media (max-width: 640px){ .card{ grid-column: 1 / -1 } }
-
-    .section{ padding: 54px 0; }
-
-    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:16px }
-    .panel{ grid-column: span 6; background: var(--card); border:1px solid color-mix(in oklab, var(--text), transparent 88%);
-      border-radius: var(--radius); padding: 24px; }
-    @media (max-width: 960px){ .panel{ grid-column: 1 / -1 } }
-
-    .gallery{ display:grid; grid-template-columns: repeat(12, 1fr); gap:10px; }
-    .shot{ grid-column: span 3; aspect-ratio: 4/3; border-radius: 16px; overflow:hidden; position:relative;
-      background: linear-gradient(135deg, color-mix(in oklab, var(--text), transparent 85%), transparent),
-                  linear-gradient(135deg, var(--accent3), var(--accent2));
-      border: 1px solid color-mix(in oklab, var(--text), transparent 85%);
+    .wrap {
+      width: min(1100px, 100%);
     }
-    .shot::after{ content: "coming soon"; position:absolute; inset:auto 8px 8px auto; font-size:11px; letter-spacing:.2px; padding:6px 8px;
-      border-radius:10px; background: color-mix(in oklab, var(--text), transparent 90%); color: var(--muted); }
 
-    .marquee{ --gap: 36px; display:flex; gap:var(--gap); overflow:hidden; mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-      padding: 10px 0; border-top: 1px solid color-mix(in oklab, var(--text), transparent 90%);
-      border-bottom: 1px solid color-mix(in oklab, var(--text), transparent 90%);
-    }
-    .marquee ul{ display:flex; gap:var(--gap); list-style:none; padding:0; margin:0; animation: scroll 28s linear infinite; }
-    .marquee li{ opacity:.8; font-weight:700; letter-spacing:.4px; color: var(--muted) }
-    @keyframes scroll { to { transform: translateX(calc(-50% - var(--gap))); } }
-
-    .footer{ padding: 48px 0 80px; color: var(--muted); font-size:14px; text-align:center; }
-    .footer a{ color:inherit; text-decoration:none; border-bottom:1px dashed color-mix(in oklab, var(--text), transparent 70%); }
-
-    /* Tiny helper classes */
-    .center{ display:flex; justify-content:center; align-items:center; }
-    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-
-    /* --- Spotify embed styling --- */
-    .spotify-card{
-      position: relative;
-      border-radius: calc(var(--radius) + 8px);
-      padding: 10px; /* for the gradient border */
-      background: linear-gradient(135deg, color-mix(in oklab, var(--text), transparent 92%), transparent) padding-box,
-                  linear-gradient(135deg, var(--accent2), var(--accent1)) border-box;
-      border: 1px solid transparent;
-      box-shadow: var(--shadow);
-    }
-    .spotify-embed{
-      border-radius: var(--radius);
-      overflow: hidden;
+    .card {
       background: var(--card);
-      border: 1px solid color-mix(in oklab, var(--text), transparent 88%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
     }
-    .spotify-embed iframe{
-      display:block; width:100%; height:352px; border:0; border-radius: var(--radius);
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
     }
-    @media (max-width: 640px){ .spotify-embed iframe{ height: 320px; } }
+
+    .left {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 13px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.07);
+    }
+
+    button.primary {
+      border-color: rgba(56,189,248,0.35);
+      background: rgba(56,189,248,0.08);
+    }
+
+    button.primary:hover {
+      background: rgba(56,189,248,0.13);
+    }
+
+    .progress-wrap {
+      padding: 10px 14px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .bar {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .bar > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 120ms ease;
+    }
+
+    .editor-shell {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      min-height: 520px;
+      max-height: 70vh;
+      overflow: hidden;
+    }
+
+    .gutter {
+      border-right: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+      padding: 18px 8px 18px 14px;
+    }
+
+    .gutter pre {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.65;
+      white-space: pre;
+      color: var(--muted);
+      text-align: right;
+      user-select: none;
+    }
+
+    .main-pane {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .layer {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      padding: 18px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.65;
+      white-space: pre; /* keep one verse per line */
+      overflow: auto;
+      tab-size: 4;
+    }
+
+    #display {
+      color: var(--text);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #display .ok {
+      color: var(--text);
+    }
+
+    #display .bad {
+      color: var(--wrong);
+      text-decoration: underline;
+      text-decoration-color: rgba(239,68,68,0.55);
+      text-underline-offset: 2px;
+    }
+
+    #display .hinted {
+      color: #93c5fd;
+    }
+
+    #input {
+      resize: none;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: transparent;     /* hide native text */
+      caret-color: #ffffff;   /* keep caret visible */
+      z-index: 2;
+    }
+
+    #input::selection {
+      background: rgba(255,255,255,0.12);
+      color: transparent;
+    }
+
+    .footer-note {
+      padding: 10px 14px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 700px) {
+      .editor-shell {
+        min-height: 420px;
+        grid-template-columns: 54px 1fr;
+      }
+      .layer, .gutter pre {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .layer { padding: 14px; }
+      .gutter { padding: 14px 6px 14px 10px; }
+      button { font-size: 13px; }
+    }
   </style>
 </head>
 <body>
-  <div class="backdrop" aria-hidden="true"></div>
-  <header>
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <span>liggjas<span style="opacity:.5">.com</span></span>
+  <div class="wrap">
+    <div class="card">
+      <div class="topbar">
+        <div class="left">
+          <div class="badge">Matteus 5 • typing practice</div>
+          <div class="badge" id="mistakesBadge">Mistakes: 0</div>
+        </div>
+        <div class="btns">
+          <button class="primary" id="hintBtn" type="button">Hint</button>
+          <button id="clearBtn" type="button">Clear</button>
+        </div>
       </div>
-      <nav class="links" aria-label="primary">
-        <a href="#about">About</a>
-        <a href="#work">Work</a>
-        <a href="#music">Music</a>
-        <a href="#contact">Contact</a>
-        <button class="btn ghost" id="themeToggle" aria-label="Toggle theme">☀︎/☾</button>
-      </nav>
+
+      <div class="progress-wrap">
+        <div class="progress-row">
+          <span id="progressText">0 / 0 correct in sequence</span>
+          <span id="percentText">0%</span>
+        </div>
+        <div class="bar"><div id="barFill"></div></div>
+      </div>
+
+      <div class="editor-shell">
+        <div class="gutter" id="gutter" aria-hidden="true">
+          <pre id="gutterText"></pre>
+        </div>
+
+        <div class="main-pane">
+          <div id="display" class="layer" aria-hidden="true"></div>
+          <textarea
+            id="input"
+            class="layer"
+            wrap="off"
+            spellcheck="false"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="off"
+            aria-label="Type Matthew chapter 5 (verse text only)"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        Type only the verse text (numbers are fixed on the left). Wrong characters turn red. Hint inserts the next word. Straight quotes (") are accepted.
+      </div>
     </div>
-  </header>
-
-  <main>
-    <section class="hero container">
-      <span class="pill">🚧 WIP — Beautiful things are loading</span>
-      <h1>Something <span style="background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent">richiebeast</span> is coming soon</h1>
-      <p>This is a clean, fast, and temporary home while the full experience ships. Drop by again shortly — or leave your email and we’ll ping you the moment it’s live.</p>
-      <div class="cta">
-        <a class="btn" href="#notify">Notify me</a>
-        <a class="btn ghost" href="#work">Preview work</a>
-      </div>
-
-      <div class="cards">
-        <article class="card">
-          <span class="tag">🚀 Sneak peek</span>
-          <h3>Lightning‑fast stack</h3>
-          <p>Built with modern standards, accessibility first, and SEO‑ready markup. No bloat, just the good parts.</p>
-        </article>
-        <article class="card">
-          <span class="tag">🎨 Aesthetic</span>
-          <h3>Delightful visuals</h3>
-          <p>Soft glass panels, subtle motion, and a gradient glow that feels <span class="mark">alive</span>.</p>
-        </article>
-        <article class="card">
-          <span class="tag">🧭 Structure</span>
-          <h3>Clear navigation</h3>
-          <p>Simple sections that you can rename later: About, Work, and Contact. Swap content in seconds.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- Featured music / Spotify embed -->
-    <section id="music" class="section container" aria-labelledby="music-title">
-      <h2 id="music-title" style="margin:0 0 14px">Now playing</h2>
-      <p style="color:var(--muted); margin:0 0 18px">A hand‑picked album to set the vibe. Dark‑mode friendly, fully responsive.</p>
-      <div class="spotify-card" role="group" aria-label="Spotify album embed">
-        <div class="spotify-embed">
-          <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/3WTZ3en4XcGbqiGsiDkChP?utm_source=generator&theme=0" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify album: 3WTZ3en4XcGbqiGsiDkChP"></iframe>
-        </div>
-      </div>
-      <div class="center" style="margin-top:12px">
-        <a class="pill" href="https://open.spotify.com/album/3WTZ3en4XcGbqiGsiDkChP" target="_blank" rel="noopener">Play on Spotify ↗</a>
-      </div>
-    </section>
-
-    <section id="about" class="section container">
-      <div class="grid">
-        <div class="panel">
-          <h2>About the project</h2>
-          <p style="color:var(--muted)">Short blurb you can edit later. Outline what you do, who you help, and why it matters. Keep it crisp; link to your best work.</p>
-          <ul>
-            <li>⚡ Mission: one sentence promise.</li>
-            <li>🧰 Services: 3–5 pillars.</li>
-            <li>🏆 Proof: one standout result.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h2 id="notify">Get notified</h2>
-          <p style="color:var(--muted)">Leave your email; we’ll send one message when everything goes live. No spam, ever.</p>
-          <form class="center" onsubmit="event.preventDefault(); document.getElementById('thanks').hidden=false; this.reset();">
-            <label class="sr-only" for="email">Email</label>
-            <input id="email" type="email" required placeholder="you@example.com" style="width:100%; max-width:460px; padding:14px 16px; border-radius:14px; border:1px solid color-mix(in oklab, var(--text), transparent 80%); background: var(--bg-soft); color:var(--text); outline: none;" />
-            <button class="btn" style="margin-left:10px">Send</button>
-          </form>
-          <p id="thanks" hidden aria-live="polite" style="margin-top:10px;color:var(--muted)">Thanks! You’re on the list.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="work" class="section container">
-      <h2 style="margin:0 0 14px">Work preview</h2>
-      <p style="color:var(--muted); margin:0 0 18px">Drop a few screenshots or placeholders here. Swap images later without touching layout.</p>
-      <div class="gallery" aria-label="gallery">
-        <div class="shot"></div>
-        <div class="shot"></div>
-        <div class="shot"></div>
-        <div class="shot"></div>
-        <div class="shot"></div>
-        <div class="shot"></div>
-        <div class="shot"></div>
-        <div class="shot"></div>
-      </div>
-    </section>
-
-    <section id="contact" class="section container">
-      <div class="grid">
-        <div class="panel">
-          <h2>Contact</h2>
-          <p style="color:var(--muted)">Prefer email? <a href="mailto:hello@example.com" style="color:inherit;text-decoration:underline">hello@example.com</a>. Add social links below.</p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px">
-            <a class="pill" href="#">Twitter</a>
-            <a class="pill" href="#">LinkedIn</a>
-            <a class="pill" href="#">GitHub</a>
-            <a class="pill" href="#">YouTube</a>
-          </div>
-        </div>
-        <div class="panel">
-          <h2>FAQ</h2>
-          <details open>
-            <summary><strong>When will the full site be ready?</strong></summary>
-            <p style="color:var(--muted)">Soon. This index page is a polished placeholder you can safely share meanwhile.</p>
-          </details>
-          <details>
-            <summary><strong>Can I customize colors?</strong></summary>
-            <p style="color:var(--muted)">Yes—tweak the <code>:root</code> variables or switch between light/dark using the toggle.</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <div class="marquee" aria-hidden="true">
-      <ul>
-        <li>• Minimal •</li>
-        <li>• Fast •</li>
-        <li>• Responsive •</li>
-        <li>• Accessible •</li>
-        <li>• Aesthetic •</li>
-        <li>• Minimal •</li>
-        <li>• Fast •</li>
-        <li>• Responsive •</li>
-        <li>• Accessible •</li>
-        <li>• Aesthetic •</li>
-      </ul>
-      <ul aria-hidden="true">
-        <li>• Minimal •</li>
-        <li>• Fast •</li>
-        <li>• Responsive •</li>
-        <li>• Accessible •</li>
-        <li>• Aesthetic •</li>
-        <li>• Minimal •</li>
-        <li>• Fast •</li>
-        <li>• Responsive •</li>
-        <li>• Accessible •</li>
-        <li>• Aesthetic •</li>
-      </ul>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <div>© <span id="year"></span> Your Brand — All rights reserved.</div>
-      <div style="margin-top:6px">This is a temporary index page. Replace content as you go.</div>
-    </div>
-  </footer>
+  </div>
 
   <script>
-    // year
-    document.getElementById('year').textContent = new Date().getFullYear();
-    // theme toggle w/ persistence
-    const root = document.documentElement;
-    const saved = localStorage.getItem('theme');
-    if(saved){ root.setAttribute('data-theme', saved); }
-    document.getElementById('themeToggle').addEventListener('click', () => {
-      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
+    // Full text INCLUDING verse numbers (these get moved to the left gutter automatically)
+    const rawTargetText = `1
+Táið Hann nú sá fólkið, fór Hann niðan á fjallið, og táið Hann hevði sett Seg, komu lærisveinar Hansara til Hansara.
+
+2
+Hann læt tá upp munnin, lærdi teir og segði:
+
+3
+„Sæl eru hini fátæku í anda; tí ríki Himmiríkis er teirra.
+
+4
+Sæl eru tey, sum syrgja; tí tey skulu verða troystað.
+
+5
+Sæl eru hini spakføru; tí tey skulu arva jørðina.
+
+6
+Sæl eru tey, sum hungra og tysta eftir rættvísi; tí tey skulu verða mettað.
+
+7
+Sæl eru hini miskunnsomu; tí tey skulu finna miskunn.
+
+8
+Sæl eru hini hjartareinu; tí tey skulu síggja Gud.
+
+9
+Sæl eru tey, sum fáa frið í lag; tí tey skulu kallast børn Guds.
+
+10
+Sæl eru tey, sum eru atsøkt fyri rættvísi skuld; tí ríki Himmiríkis er teirra.
+
+11
+Sæl eru tit, táið tey spotta tykkum og søkja at tykkum og lúgva alt ilt um tykkum fyri Mína skuld.
+
+12
+Gleðist og fegnist! Tí løn tykkara er stór í Himli; soleiðis søktu tey at profetunum, ið vóru fyri tykkum.
+
+13
+Tit eru salt jarðarinnar; men missir saltið kraft sína, hvussu skal tað aftur verða salt! Tað dugir einki longur uttan at verða kastað út og traðkað niður av menniskjum.
+
+14
+Tit eru ljós heimsins; staður, ið stendur á fjalli, fjalist ikki.
+
+15
+Tey tendra heldur ikki ljós og seta tað undir skeppumálið – nei, í ljósastakan; so lýsir tað øllum í húsinum.
+
+16
+Latið soleiðis ljós tykkara lýsa menniskjum, so tey kunnu síggja góðu verk tykkara og æra Faðir tykkara, sum er í Himli!
+
+17
+Hugsið ikki, at Eg eri komin at seta lógina úr gildi – ella profetarnar! Eg eri ikki komin at seta úr gildi, men at fullkoma.
+
+18
+Tí sanniliga, sigi Eg tykkum: Inntil Himmal og jørð forganga, skal ikki minsti bókstavur ella prikkur av lógini forganga, fyrrenn tað alt hevur hent.
+
+19
+Hvør tann, sum tí brýtur eitt hitt minsta av hesum boðum og lærir menniskju so, skal kallast hin minsti í ríki Himmiríkis; men tann, ið heldur tey og lærir tey, skal kallast stórur í ríki Himmiríkis.
+
+20
+Tí Eg sigi tykkum: Er rættvísi tykkara ikki mætari enn rættvísi hinna skriftlærdu og Farisearanna, koma tit als ikki inn í ríki Himmiríkis.
+
+21
+Tit hava hoyrt, at sagt varð við hinar gomlu: „Tú mást ikki drepa; og tann, ið drepur, skal vera sekur fyri dóminum.“
+
+22
+Men Eg sigi tykkum, at hvør tann, sum uttan grund er illur við bróður sín, skal vera sekur fyri dóminum. Tann, ið sigur við bróður sín: „Raka!“* skal vera sekur fyri ráðnum, og tann, ið sigur: „Dári tín!“ skal vera sekur til eld Helvitis.
+
+23
+Um tær tí kemur í hug, táið tú bert fram gávu tína á altarið, at bróðir tín hevur okkurt ímóti tær,
+
+24
+lat tá gávu tína liggja har framman fyri altarið og far og verð fyrst samdur við bróður tín – kom so og ber fram gávu tína!
+
+25
+Ver skjótur til semju við mótpart tín, meðan tú enn ert á vegnum við honum, so ikki mótparturin letur teg dómaranum í hendur, og dómarin letur teg tænaranum í hendur, og tú verður settur í fangahús!
+
+26
+Sanniliga, sigi Eg tær: Tú skalt als ikki sleppa út haðani, fyrrenn tú hevur goldið síðsta oyrað.
+
+27
+Tit hava hoyrt, at sagt er: „Tú mást ikki dríva hor.“
+
+28
+Men Eg sigi tykkum, at hvør tann, ið hyggur á kvinnu og hevur hug á henni, hevur longu drivið hor við henni í hjarta sínum.
+
+29
+Um nú høgra eyga títt freistar teg, so rív tað út og kasta tað frá tær! Tað er tær betri, at ein limur tín verður forkomin, enn at alt likam títt verður kastað í Helviti.
+
+30
+Og um høgra hond tín freistar teg, so høgg hana av og kasta hana frá tær! – Tað er tær betri, at ein limur tín verður forkomin, enn at alt likam títt verður kastað í Helviti.
+
+31
+Eisini er sagt: „Tann, ið skilst frá konu síni, skal geva henni skilnaðarbræv.“
+
+32
+Men Eg sigi tykkum, at hvør tann, ið skilst frá konu síni fyri nakað annað enn hor, ger, at hon drívur hor, og hvør tann, ið tekur fráskilda kvinnu til ekta, drívur hor.
+
+33
+Uppaftur hava tit hoyrt, at sagt er við hinar gomlu: „Tú mást ikki svørja rangan eið; nei, tú skalt halda Harranum eiðir tínar.“
+
+34
+Men Eg sigi tykkum, at tit skulu als ikki svørja – ikki um Himmalin, tí hann er hásæti Guds;
+
+35
+ei heldur um jørðina, tí hon er fótaskammul Hansara; ei heldur um Jerusalem, tí tað er staður hins stóra kongs;
+
+36
+ei heldur mást tú svørja um høvd títt, tí tú fært ikki gjørt hár hvítt ella svart.
+
+37
+Nei, tala tykkara skal vera: „Ja, ja, nei, nei,“ og tað, sum meir er enn hetta, er av hinum illa.
+
+38
+Tit hava hoyrt, at sagt er: „Eyga fyri eyga, og tonn fyri tonn!“
+
+39
+Men Eg sigi tykkum, at tit skulu ikki seta tykkum ímóti hinum illa; nei, slær onkur teg undir høgra vanga, so vend honum hin við!
+
+40
+Vil onkur saksøkja teg og taka kyrtil tín, so lat hann fáa kappan við!
+
+41
+Og noyðir onkur teg at ganga eina míl við sær, so gakk tvær við honum!
+
+42
+Gev tí, sum biður teg, og vend tær ikki frá tí, sum vil læna frá tær!
+
+43
+Tit hava hoyrt, at sagt er: „Tú skalt elska næsta tín og hata fígginda tín!“
+
+44
+Men Eg sigi tykkum: Elskið fíggindar tykkara, signið tey, sum banna tykkum, gerið teimum gott, sum hata tykkum, og biðið fyri teimum, ið háða tykkum og søkja at tykkum
+
+45
+– fyri at tit kunnu verða børn Faðirs tykkara, sum í Himli er! Tí Hann letur sól Sína renna upp yvir ónd og góð og letur regna yvir rættvís og órættvís.
+
+46
+Tí um tit elska tey, sum elska tykkum, hvørja løn eiga tit fyri tað! Gera ikki eisini tollararnir tað sama!
+
+47
+Og um tit heilsa bert brøðrum tykkara, hvat stórt gera tit tá! Gera ikki eisini heidningarnir so!
+
+48
+Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`;
+
+    const input = document.getElementById('input');
+    const display = document.getElementById('display');
+    const gutter = document.getElementById('gutter');
+    const gutterText = document.getElementById('gutterText');
+    const hintBtn = document.getElementById('hintBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const mistakesBadge = document.getElementById('mistakesBadge');
+    const progressText = document.getElementById('progressText');
+    const percentText = document.getElementById('percentText');
+    const barFill = document.getElementById('barFill');
+
+    let hintedIndices = new Set();
+
+    function parseVerseText(raw) {
+      const lines = raw.replace(/\r\n/g, '\n').split('\n');
+      const verseNumbers = [];
+      const verses = [];
+
+      let currentNo = null;
+      let currentText = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+
+        if (/^\d+$/.test(trimmed)) {
+          if (currentNo !== null) {
+            verses.push(currentText.join('\n').trimEnd());
+          }
+          currentNo = trimmed;
+          verseNumbers.push(trimmed);
+          currentText = [];
+
+          // skip blank lines directly after number
+          while (i + 1 < lines.length && lines[i + 1] === '') i++;
+        } else {
+          currentText.push(line);
+        }
+      }
+
+      if (currentNo !== null) {
+        verses.push(currentText.join('\n').trimEnd());
+      }
+
+      return { verseNumbers, verses };
+    }
+
+    const parsed = parseVerseText(rawTargetText);
+    const verseNumbers = parsed.verseNumbers;
+    const verses = parsed.verses;
+
+    // User types only verse text, one verse per line
+    const targetText = verses.join('\n');
+    gutterText.textContent = verseNumbers.join('\n');
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function normalizeChar(ch) {
+      if (ch == null) return ch;
+      // Accept straight quote for book quotes
+      if (ch === '"' || ch === '„' || ch === '“' || ch === '”') return '"';
+      return ch;
+    }
+
+    function sameChar(a, b) {
+      if (a == null || b == null) return false;
+      return normalizeChar(a) === normalizeChar(b);
+    }
+
+    function render() {
+      const typed = input.value;
+      let html = '';
+      let mistakes = 0;
+
+      for (let i = 0; i < typed.length; i++) {
+        const ch = typed[i];
+        const expected = targetText[i] ?? null;
+        const isCorrect = expected !== null && sameChar(ch, expected);
+        if (!isCorrect) mistakes++;
+
+        const cls = isCorrect
+          ? (hintedIndices.has(i) ? 'hinted' : 'ok')
+          : 'bad';
+
+        html += `<span class="${cls}">${escapeHtml(ch)}</span>`;
+      }
+
+      if (typed.length === 0 || typed.endsWith('\n')) {
+        html += '<span class="ok">\n</span>';
+      }
+
+      display.innerHTML = html;
+
+      // Correct prefix progress
+      let prefix = 0;
+      const maxPrefix = Math.min(typed.length, targetText.length);
+      while (prefix < maxPrefix && sameChar(typed[prefix], targetText[prefix])) {
+        prefix++;
+      }
+
+      const total = targetText.length;
+      const pct = total ? Math.floor((prefix / total) * 100) : 0;
+
+      mistakesBadge.textContent = `Mistakes: ${mistakes}`;
+      progressText.textContent = `${prefix} / ${total} correct in sequence`;
+      percentText.textContent = `${pct}%`;
+      barFill.style.width = `${pct}%`;
+    }
+
+    function syncScroll() {
+      display.scrollTop = input.scrollTop;
+      display.scrollLeft = input.scrollLeft;
+      gutter.scrollTop = input.scrollTop;
+    }
+
+    function getHintChunk(startIndex) {
+      if (startIndex >= targetText.length) return '';
+
+      let end = startIndex;
+
+      // include whitespace first if cursor is on whitespace/newline
+      while (end < targetText.length && /\s/.test(targetText[end])) end++;
+
+      // then include next word
+      while (end < targetText.length && !/\s/.test(targetText[end])) end++;
+
+      // if cursor was in middle of a word
+      if (end === startIndex) {
+        while (end < targetText.length && !/\s/.test(targetText[end])) end++;
+      }
+
+      return targetText.slice(startIndex, end);
+    }
+
+    function applyHint() {
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const chunk = getHintChunk(start);
+      if (!chunk) return;
+
+      const before = input.value.slice(0, start);
+      const after = input.value.slice(end);
+      input.value = before + chunk + after;
+
+      const insertedLen = chunk.length;
+      const newHinted = new Set();
+
+      for (const idx of hintedIndices) {
+        if (idx < start) newHinted.add(idx);
+        else if (idx >= end) newHinted.add(idx - (end - start) + insertedLen);
+      }
+
+      for (let i = 0; i < insertedLen; i++) {
+        newHinted.add(start + i);
+      }
+
+      hintedIndices = newHinted;
+
+      const caret = start + insertedLen;
+      input.setSelectionRange(caret, caret);
+      input.focus();
+      render();
+      syncScroll();
+    }
+
+    function clearAll() {
+      input.value = '';
+      hintedIndices = new Set();
+      render();
+      syncScroll();
+      input.focus();
+    }
+
+    input.addEventListener('input', () => {
+      // keep only valid hinted markers after manual edits
+      const next = new Set();
+      for (const i of hintedIndices) {
+        if (i < input.value.length && sameChar(input.value[i], targetText[i])) {
+          next.add(i);
+        }
+      }
+      hintedIndices = next;
+      render();
     });
+
+    input.addEventListener('scroll', syncScroll);
+    hintBtn.addEventListener('click', applyHint);
+    clearBtn.addEventListener('click', clearAll);
+
+    render();
+    input.focus();
   </script>
 </body>
 </html>
