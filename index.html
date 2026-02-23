@@ -542,7 +542,7 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
       const total = targetText.length;
       const pct = total ? Math.floor((prefix / total) * 100) : 0;
 
-      mistakesBadge.textContent = `Mistakes: ${mistakes}`;
+      mistakesBadge.textContent = `Feilir: ${mistakes}`;
       progressText.textContent = `${prefix} / ${total} correct in sequence`;
       percentText.textContent = `${pct}%`;
       barFill.style.width = `${pct}%`;
