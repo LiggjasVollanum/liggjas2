@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fjallaprædikan</title>
+  <title>Fjallaprædikan • Typing</title>
   <style>
     :root{
       --bg1: #0f172a;
@@ -13,6 +13,7 @@
       --text: #e5e7eb;
       --muted: #94a3b8;
       --wrong: #ef4444;
+      --ok: #22c55e;
       --accent: #38bdf8;
       --accent2: #22c55e;
       --shadow: 0 20px 60px rgba(0,0,0,0.35);
@@ -31,11 +32,11 @@
         linear-gradient(160deg, var(--bg1), var(--bg2));
       display: grid;
       place-items: center;
-      padding: 24px;
+      padding: 20px;
     }
 
     .wrap {
-      width: min(1100px, 100%);
+      width: min(1200px, 100%);
     }
 
     .card {
@@ -53,16 +54,16 @@
       gap: 10px;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 14px 10px;
+      padding: 14px;
       border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,0.02);
     }
 
     .left {
       display: flex;
-      gap: 10px;
-      align-items: center;
+      gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .badge {
@@ -72,6 +73,7 @@
       padding: 6px 10px;
       border-radius: 999px;
       background: rgba(255,255,255,0.02);
+      white-space: nowrap;
     }
 
     .btns {
@@ -100,10 +102,6 @@
     button.primary {
       border-color: rgba(56,189,248,0.35);
       background: rgba(56,189,248,0.08);
-    }
-
-    button.primary:hover {
-      background: rgba(56,189,248,0.13);
     }
 
     .progress-wrap {
@@ -135,85 +133,121 @@
       transition: width 120ms ease;
     }
 
-    .editor-shell {
+    .verses {
+      max-height: 72vh;
+      overflow: auto;
+      padding: 14px;
+    }
+
+    .verse-row {
       display: grid;
-      grid-template-columns: 64px 1fr;
-      min-height: 520px;
-      max-height: 70vh;
-      overflow: hidden;
+      grid-template-columns: 42px 1fr;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 8px;
     }
 
-    .gutter {
-      border-right: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
-      overflow: hidden;
-      padding: 18px 8px 18px 14px;
-    }
-
-    .gutter pre {
-      margin: 0;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size: 16px;
-      line-height: 1.65;
-      white-space: pre;
+    .verse-no {
       color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 14px;
+      line-height: 2.2;
       text-align: right;
+      user-select: none;
+      padding-top: 2px;
+    }
+
+    .verse-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0;
+      row-gap: 8px;
+      min-width: 0;
+    }
+
+    .static {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 15px;
+      line-height: 1;
+      color: var(--muted);
+      white-space: pre;
       user-select: none;
     }
 
-    .main-pane {
-      position: relative;
-      min-width: 0;
-      overflow: hidden;
+    .punct {
+      color: #cbd5e1;
     }
 
-    .layer {
+    .slot {
+      position: relative;
+      display: inline-block;
+      min-width: 3ch;
+      width: calc(var(--w) * 0.68em + 18px);
+      height: 34px;
+      margin: 0 1px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.03);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.03);
+      overflow: hidden;
+      vertical-align: middle;
+    }
+
+    .slot:focus-within {
+      border-color: rgba(56,189,248,0.45);
+      box-shadow: 0 0 0 2px rgba(56,189,248,0.16);
+    }
+
+    .slot.has-error {
+      border-color: rgba(239,68,68,0.5);
+    }
+
+    .slot.is-complete {
+      border-color: rgba(34,197,94,0.35);
+    }
+
+    .slot-display, .slot-input {
       position: absolute;
       inset: 0;
-      margin: 0;
-      padding: 18px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size: 16px;
-      line-height: 1.65;
-      white-space: pre; /* keep one verse per line */
-      overflow: auto;
-      tab-size: 4;
+      padding: 6px 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 15px;
+      line-height: 20px;
+      white-space: pre;
+      letter-spacing: 0;
     }
 
-    #display {
-      color: var(--text);
+    .slot-display {
       pointer-events: none;
+      color: var(--text);
       z-index: 1;
     }
 
-    #display .ok {
-      color: var(--text);
-    }
-
-    #display .bad {
+    .slot-display .ok { color: var(--text); }
+    .slot-display .bad {
       color: var(--wrong);
       text-decoration: underline;
-      text-decoration-color: rgba(239,68,68,0.55);
+      text-decoration-color: rgba(239,68,68,0.6);
       text-underline-offset: 2px;
     }
 
-    #display .hinted {
-      color: #93c5fd;
+    .slot-display .ghost {
+      color: rgba(148,163,184,0.22);
     }
 
-    #input {
-      resize: none;
-      width: 100%;
-      height: 100%;
+    .slot-input {
+      z-index: 2;
       border: 0;
       outline: none;
+      width: 100%;
+      height: 100%;
       background: transparent;
-      color: transparent;     /* hide native text */
-      caret-color: #ffffff;   /* keep caret visible */
-      z-index: 2;
+      color: transparent;          /* hide native text */
+      caret-color: #fff;           /* but keep caret */
     }
 
-    #input::selection {
+    .slot-input::selection {
       background: rgba(255,255,255,0.12);
       color: transparent;
     }
@@ -226,17 +260,11 @@
     }
 
     @media (max-width: 700px) {
-      .editor-shell {
-        min-height: 420px;
-        grid-template-columns: 54px 1fr;
-      }
-      .layer, .gutter pre {
-        font-size: 15px;
-        line-height: 1.6;
-      }
-      .layer { padding: 14px; }
-      .gutter { padding: 14px 6px 14px 10px; }
-      button { font-size: 13px; }
+      .verse-row { grid-template-columns: 34px 1fr; gap: 8px; }
+      .verse-no { font-size: 13px; }
+      .slot { height: 32px; }
+      .slot-display, .slot-input { font-size: 14px; padding: 6px 7px; }
+      .static { font-size: 14px; }
     }
   </style>
 </head>
@@ -245,51 +273,34 @@
     <div class="card">
       <div class="topbar">
         <div class="left">
-          <div class="badge">Fjallaprædikan skrivi trening.</div>
-          <div class="badge" id="mistakesBadge">Feilir: 0</div>
+          <div class="badge">Matteus 5 • Fjallaprædikan</div>
+          <div class="badge" id="mistakesBadge">Mistakes: 0</div>
+          <div class="badge" id="slotsBadge">Slots: 0</div>
         </div>
         <div class="btns">
-          <button class="primary" id="hintBtn" type="button">Hjálp</button>
-          <button id="clearBtn" type="button">Rudda alt</button>
+          <button class="primary" id="hintBtn" type="button">Hint</button>
+          <button id="clearBtn" type="button">Clear</button>
         </div>
       </div>
 
       <div class="progress-wrap">
         <div class="progress-row">
-          <span id="progressText">0 / 0 rætt á rað</span>
+          <span id="progressText">0 / 0 chars correct in sequence</span>
           <span id="percentText">0%</span>
         </div>
         <div class="bar"><div id="barFill"></div></div>
       </div>
 
-      <div class="editor-shell">
-        <div class="gutter" id="gutter" aria-hidden="true">
-          <pre id="gutterText"></pre>
-        </div>
-
-        <div class="main-pane">
-          <div id="display" class="layer" aria-hidden="true"></div>
-          <textarea
-            id="input"
-            class="layer"
-            wrap="off"
-            spellcheck="false"
-            autocorrect="off"
-            autocapitalize="off"
-            autocomplete="off"
-            aria-label="Type Matthew chapter 5 (verse text only)"
-          ></textarea>
-        </div>
-      </div>
+      <div class="verses" id="verses"></div>
 
       <div class="footer-note">
-        Skriva bert tað næsta orðið í versinum. Skeivir stavir verða reyðir. "Hjálp" vísir næsta stav.
+        Verse numbers and punctuation are fixed. You only type the letter boxes. Upper/lower case is ignored.
       </div>
     </div>
   </div>
 
   <script>
-    // Full text INCLUDING verse numbers (these get moved to the left gutter automatically)
+    // Full chapter text with verse numbers (used to auto-build rows)
     const rawTargetText = `1
 Táið Hann nú sá fólkið, fór Hann niðan á fjallið, og táið Hann hevði sett Seg, komu lærisveinar Hansara til Hansara.
 
@@ -434,24 +445,22 @@ Og um tit heilsa bert brøðrum tykkara, hvat stórt gera tit tá! Gera ikki eis
 48
 Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`;
 
-    const input = document.getElementById('input');
-    const display = document.getElementById('display');
-    const gutter = document.getElementById('gutter');
-    const gutterText = document.getElementById('gutterText');
-    const hintBtn = document.getElementById('hintBtn');
-    const clearBtn = document.getElementById('clearBtn');
+    const versesEl = document.getElementById('verses');
     const mistakesBadge = document.getElementById('mistakesBadge');
+    const slotsBadge = document.getElementById('slotsBadge');
     const progressText = document.getElementById('progressText');
     const percentText = document.getElementById('percentText');
     const barFill = document.getElementById('barFill');
+    const hintBtn = document.getElementById('hintBtn');
+    const clearBtn = document.getElementById('clearBtn');
 
-    let hintedIndices = new Set();
+    const slots = []; // {el,input,display,target,verseNo,index}
+    const PUNCT = new Set([",",";",".",":","!","?","„","“","\"","–","*","(",")"]);
 
     function parseVerseText(raw) {
       const lines = raw.replace(/\r\n/g, '\n').split('\n');
       const verseNumbers = [];
       const verses = [];
-
       let currentNo = null;
       let currentText = [];
 
@@ -460,176 +469,307 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
         const trimmed = line.trim();
 
         if (/^\d+$/.test(trimmed)) {
-          if (currentNo !== null) {
-            verses.push(currentText.join('\n').trimEnd());
-          }
+          if (currentNo !== null) verses.push(currentText.join('\n').trimEnd());
           currentNo = trimmed;
           verseNumbers.push(trimmed);
           currentText = [];
-
-          // skip blank lines directly after number
           while (i + 1 < lines.length && lines[i + 1] === '') i++;
         } else {
           currentText.push(line);
         }
       }
-
-      if (currentNo !== null) {
-        verses.push(currentText.join('\n').trimEnd());
-      }
-
+      if (currentNo !== null) verses.push(currentText.join('\n').trimEnd());
       return { verseNumbers, verses };
     }
 
-    const parsed = parseVerseText(rawTargetText);
-    const verseNumbers = parsed.verseNumbers;
-    const verses = parsed.verses;
+    function tokenizeVerse(verse) {
+      const tokens = [];
+      let buf = "";
 
-    // User types only verse text, one verse per line
-    const targetText = verses.join('\n');
-    gutterText.textContent = verseNumbers.join('\n');
+      const flushText = () => {
+        if (!buf) return;
+        const raw = buf;
+        buf = "";
 
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        const lead = (raw.match(/^\s+/) || [""])[0];
+        const trail = (raw.match(/\s+$/) || [""])[0];
+        const core = raw.slice(lead.length, raw.length - trail.length);
+
+        if (lead) tokens.push({ type: "space", text: lead });
+        if (core) tokens.push({ type: "chunk", text: core });
+        if (trail) tokens.push({ type: "space", text: trail });
+      };
+
+      for (const ch of verse) {
+        if (PUNCT.has(ch)) {
+          flushText();
+          tokens.push({ type: "punct", text: ch });
+        } else {
+          buf += ch;
+        }
+      }
+      flushText();
+
+      return tokens;
     }
 
-    function normalizeChar(ch) {
-      if (ch == null) return ch;
-      // Accept straight quote for book quotes
-      if (ch === '"' || ch === '„' || ch === '“' || ch === '”') return '"';
-      return ch;
+    function esc(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function visibleChar(ch) {
+      return ch === " " ? "&nbsp;" : esc(ch);
+    }
+
+    function normChar(ch) {
+      return ch.toLocaleLowerCase("fo");
     }
 
     function sameChar(a, b) {
-      if (a == null || b == null) return false;
-      return normalizeChar(a) === normalizeChar(b);
+      return normChar(a) === normChar(b);
     }
 
-    function render() {
-      const typed = input.value;
-      let html = '';
-      let mistakes = 0;
+    function renderSlot(slot) {
+      const typed = slot.input.value;
+      const target = slot.target;
+
+      let html = "";
+      let hasError = false;
+      let completeCorrect = typed.length === target.length;
 
       for (let i = 0; i < typed.length; i++) {
-        const ch = typed[i];
-        const expected = targetText[i] ?? null;
-        const isCorrect = expected !== null && sameChar(ch, expected);
-        if (!isCorrect) mistakes++;
-
-        const cls = isCorrect
-          ? (hintedIndices.has(i) ? 'hinted' : 'ok')
-          : 'bad';
-
-        html += `<span class="${cls}">${escapeHtml(ch)}</span>`;
+        const ok = i < target.length && sameChar(typed[i], target[i]);
+        if (!ok) hasError = true;
+        html += `<span class="${ok ? "ok" : "bad"}">${visibleChar(typed[i])}</span>`;
       }
 
-      if (typed.length === 0 || typed.endsWith('\n')) {
-        html += '<span class="ok">\n</span>';
+      // optional faint placeholder "length hint"
+      for (let i = typed.length; i < target.length; i++) {
+        html += `<span class="ghost">${target[i] === " " ? "&nbsp;" : "·"}</span>`;
       }
 
-      display.innerHTML = html;
+      // empty slot should still have height
+      if (!html) html = "&nbsp;";
 
-      // Correct prefix progress
+      // if lengths differ, not complete
+      if (typed.length !== target.length) completeCorrect = false;
+      // if same length but any mismatch, not complete
+      if (hasError) completeCorrect = false;
+
+      slot.display.innerHTML = html;
+      slot.el.classList.toggle("has-error", hasError);
+      slot.el.classList.toggle("is-complete", completeCorrect);
+    }
+
+    function renderAll() {
+      let mistakes = 0;
+      let totalChars = 0;
       let prefix = 0;
-      const maxPrefix = Math.min(typed.length, targetText.length);
-      while (prefix < maxPrefix && sameChar(typed[prefix], targetText[prefix])) {
-        prefix++;
+      let prefixStopped = false;
+
+      for (const slot of slots) {
+        renderSlot(slot);
+
+        const typed = slot.input.value;
+        const target = slot.target;
+        totalChars += target.length;
+
+        for (let i = 0; i < typed.length; i++) {
+          if (i >= target.length || !sameChar(typed[i], target[i])) mistakes++;
+        }
+
+        // prefix correctness across slots in sequence
+        if (!prefixStopped) {
+          const n = Math.min(typed.length, target.length);
+
+          for (let i = 0; i < n; i++) {
+            if (sameChar(typed[i], target[i])) {
+              prefix++;
+            } else {
+              prefixStopped = true;
+              break;
+            }
+          }
+
+          // stop prefix if this slot isn't fully filled yet
+          if (!prefixStopped && typed.length < target.length) {
+            prefixStopped = true;
+          }
+        }
       }
 
-      const total = targetText.length;
-      const pct = total ? Math.floor((prefix / total) * 100) : 0;
-
-      mistakesBadge.textContent = `Feilir: ${mistakes}`;
-      progressText.textContent = `${prefix} / ${total} rætt á rað`;
+      const pct = totalChars ? Math.floor((prefix / totalChars) * 100) : 0;
+      mistakesBadge.textContent = `Mistakes: ${mistakes}`;
+      slotsBadge.textContent = `Slots: ${slots.length}`;
+      progressText.textContent = `${prefix} / ${totalChars} chars correct in sequence`;
       percentText.textContent = `${pct}%`;
       barFill.style.width = `${pct}%`;
     }
 
-    function syncScroll() {
-      display.scrollTop = input.scrollTop;
-      display.scrollLeft = input.scrollLeft;
-      gutter.scrollTop = input.scrollTop;
+    function buildUI() {
+      const { verseNumbers, verses } = parseVerseText(rawTargetText);
+      versesEl.innerHTML = "";
+
+      let slotCounter = 0;
+
+      for (let i = 0; i < verses.length; i++) {
+        const verseNo = verseNumbers[i];
+        const verse = verses[i];
+        const tokens = tokenizeVerse(verse);
+
+        const row = document.createElement("div");
+        row.className = "verse-row";
+
+        const no = document.createElement("div");
+        no.className = "verse-no";
+        no.textContent = verseNo + ".";
+
+        const line = document.createElement("div");
+        line.className = "verse-line";
+
+        for (const token of tokens) {
+          if (token.type === "space") {
+            const span = document.createElement("span");
+            span.className = "static";
+            span.textContent = token.text;
+            line.appendChild(span);
+          } else if (token.type === "punct") {
+            const span = document.createElement("span");
+            span.className = "static punct";
+            span.textContent = token.text;
+            line.appendChild(span);
+          } else if (token.type === "chunk") {
+            const slot = document.createElement("div");
+            slot.className = "slot";
+            slot.style.setProperty("--w", Math.max(token.text.length, 3));
+
+            const display = document.createElement("div");
+            display.className = "slot-display";
+            display.setAttribute("aria-hidden", "true");
+
+            const input = document.createElement("input");
+            input.className = "slot-input";
+            input.type = "text";
+            input.autocomplete = "off";
+            input.autocapitalize = "off";
+            input.spellcheck = false;
+            input.maxLength = token.text.length;
+            input.dataset.index = String(slotCounter);
+
+            slot.appendChild(display);
+            slot.appendChild(input);
+            line.appendChild(slot);
+
+            const slotObj = { el: slot, input, display, target: token.text, verseNo, index: slotCounter };
+            slots.push(slotObj);
+            slotCounter++;
+          }
+        }
+
+        row.appendChild(no);
+        row.appendChild(line);
+        versesEl.appendChild(row);
+      }
+
+      // listeners
+      for (let i = 0; i < slots.length; i++) {
+        const current = slots[i];
+        const next = slots[i + 1] || null;
+        const prev = slots[i - 1] || null;
+
+        current.input.addEventListener("input", () => {
+          // hard trim (maxlength should already do this)
+          if (current.input.value.length > current.target.length) {
+            current.input.value = current.input.value.slice(0, current.target.length);
+          }
+          renderAll();
+
+          // auto-jump when full
+          if (next && current.input.value.length >= current.target.length) {
+            next.input.focus();
+            next.input.select();
+          }
+        });
+
+        current.input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && current.input.selectionStart === 0 && current.input.selectionEnd === 0 && current.input.value.length === 0 && prev) {
+            e.preventDefault();
+            prev.input.focus();
+            prev.input.setSelectionRange(prev.input.value.length, prev.input.value.length);
+          }
+
+          if (e.key === "ArrowLeft" && current.input.selectionStart === 0 && current.input.selectionEnd === 0 && prev) {
+            prev.input.focus();
+            prev.input.setSelectionRange(prev.input.value.length, prev.input.value.length);
+          }
+
+          if (e.key === "ArrowRight" && current.input.selectionStart === current.input.value.length && current.input.selectionEnd === current.input.value.length && next) {
+            next.input.focus();
+            next.input.setSelectionRange(0, 0);
+          }
+
+          if (e.key === "Enter") {
+            e.preventDefault();
+            if (next) {
+              next.input.focus();
+              next.input.select();
+            }
+          }
+        });
+
+        current.input.addEventListener("paste", (e) => {
+          // keep pastes local to one slot (clean/simple behavior)
+          e.preventDefault();
+          const txt = (e.clipboardData || window.clipboardData).getData("text");
+          current.input.value = txt.slice(0, current.target.length);
+          renderAll();
+        });
+      }
+
+      renderAll();
+      if (slots[0]) slots[0].input.focus();
     }
 
-    function getHintChunk(startIndex) {
-      if (startIndex >= targetText.length) return '';
+    function revealHint() {
+      // Fill the first slot that is not fully correct
+      for (const slot of slots) {
+        const typed = slot.input.value;
+        const target = slot.target;
 
-      let end = startIndex;
+        let fullyCorrect = typed.length === target.length;
+        if (fullyCorrect) {
+          for (let i = 0; i < target.length; i++) {
+            if (!sameChar(typed[i], target[i])) {
+              fullyCorrect = false;
+              break;
+            }
+          }
+        }
 
-      // include whitespace first if cursor is on whitespace/newline
-      while (end < targetText.length && /\s/.test(targetText[end])) end++;
-
-      // then include next word
-      while (end < targetText.length && !/\s/.test(targetText[end])) end++;
-
-      // if cursor was in middle of a word
-      if (end === startIndex) {
-        while (end < targetText.length && !/\s/.test(targetText[end])) end++;
+        if (!fullyCorrect) {
+          slot.input.value = target;
+          renderAll();
+          slot.input.focus();
+          slot.input.setSelectionRange(target.length, target.length);
+          slot.el.scrollIntoView({ block: "nearest", inline: "nearest" });
+          return;
+        }
       }
-
-      return targetText.slice(startIndex, end);
-    }
-
-    function applyHint() {
-      const start = input.selectionStart;
-      const end = input.selectionEnd;
-      const chunk = getHintChunk(start);
-      if (!chunk) return;
-
-      const before = input.value.slice(0, start);
-      const after = input.value.slice(end);
-      input.value = before + chunk + after;
-
-      const insertedLen = chunk.length;
-      const newHinted = new Set();
-
-      for (const idx of hintedIndices) {
-        if (idx < start) newHinted.add(idx);
-        else if (idx >= end) newHinted.add(idx - (end - start) + insertedLen);
-      }
-
-      for (let i = 0; i < insertedLen; i++) {
-        newHinted.add(start + i);
-      }
-
-      hintedIndices = newHinted;
-
-      const caret = start + insertedLen;
-      input.setSelectionRange(caret, caret);
-      input.focus();
-      render();
-      syncScroll();
     }
 
     function clearAll() {
-      input.value = '';
-      hintedIndices = new Set();
-      render();
-      syncScroll();
-      input.focus();
+      for (const slot of slots) slot.input.value = "";
+      renderAll();
+      if (slots[0]) {
+        slots[0].input.focus();
+        slots[0].input.setSelectionRange(0, 0);
+      }
     }
 
-    input.addEventListener('input', () => {
-      // keep only valid hinted markers after manual edits
-      const next = new Set();
-      for (const i of hintedIndices) {
-        if (i < input.value.length && sameChar(input.value[i], targetText[i])) {
-          next.add(i);
-        }
-      }
-      hintedIndices = next;
-      render();
-    });
+    hintBtn.addEventListener("click", revealHint);
+    clearBtn.addEventListener("click", clearAll);
 
-    input.addEventListener('scroll', syncScroll);
-    hintBtn.addEventListener('click', applyHint);
-    clearBtn.addEventListener('click', clearAll);
-
-    render();
-    input.focus();
+    buildUI();
   </script>
 </body>
 </html>
