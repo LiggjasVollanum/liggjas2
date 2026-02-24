@@ -522,6 +522,8 @@ Og um tit heilsa bert brøðrum tykkara, hvat stórt gera tit tá! Gera ikki eis
 Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`;
 
     const versesEl = document.getElementById('verses');
+    const cookieBanner = document.getElementById('cookieBanner');
+    const cookieAcceptBtn = document.getElementById('cookieAcceptBtn');
     const mistakesBadge = document.getElementById('mistakesBadge');
     const slotsBadge = document.getElementById('slotsBadge');
     const progressText = document.getElementById('progressText');
@@ -919,12 +921,36 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
         slots[0].input.setSelectionRange(0, 0);
       }
     }
+    function initCookieBanner() {
+  const STORAGE_KEY = "fjallapraedikan_cookie_notice_v1";
+
+  // Um elementini ikki finnast, so ger einki
+  if (!cookieBanner || !cookieAcceptBtn) return;
+
+  try {
+    if (localStorage.getItem(STORAGE_KEY) === "1") {
+      cookieBanner.classList.add("hidden");
+    }
+  } catch (e) {
+    // localStorage kann vera blokkerað — tá vísa vit bara bannaran
+  }
+
+  cookieAcceptBtn.addEventListener("click", () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, "1");
+    } catch (e) {
+      // ignore
+    }
+    cookieBanner.classList.add("hidden");
+  });
+}
 
     hintWordBtn.addEventListener("click", revealNextWord);
     hintBoxBtn.addEventListener("click", revealNextBox);
     clearBtn.addEventListener("click", clearAll);
 
     buildUI();
+initCookieBanner();
   </script>
 </body>
 </html>
