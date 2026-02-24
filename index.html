@@ -260,7 +260,71 @@
       color: var(--muted);
       border-top: 1px solid var(--border);
     }
+    .cookie-banner {
+      position: fixed;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+    }
 
+    .cookie-banner.hidden {
+      display: none;
+    }
+
+    .cookie-inner {
+      width: min(900px, 100%);
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      padding: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: auto;
+    }
+
+    .cookie-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .cookie-text strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .cookie-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .cookie-actions button {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+      .cookie-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .cookie-actions {
+        width: 100%;
+      }
+
+      .cookie-actions button {
+        width: 100%;
+      }
+    }
     @media (max-width: 700px) {
       .verse-row { grid-template-columns: 34px 1fr; gap: 8px; }
       .verse-no { font-size: 13px; }
@@ -301,7 +365,16 @@
       </div>
     </div>
   </div>
-
+  <div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookies kunning">
+    <div class="cookie-inner">
+      <div class="cookie-text">
+        <strong>Cookies:</strong> Henda síðan brúkar ikki tracking-cookies. Vit goyma bert eitt lokalt val í tínum kaga (browser) fyri at minnast, at tú hevur goðtikið hesa kunningina.
+      </div>
+      <div class="cookie-actions">
+        <button class="primary" id="cookieAcceptBtn" type="button">Góðtak</button>
+      </div>
+    </div>
+  </div>
   <script>
     // Full chapter text with verse numbers (used to auto-build rows)
     const rawTargetText = `1
