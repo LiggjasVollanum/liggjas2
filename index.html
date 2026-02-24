@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fjallaprædikan</title>
+  <title>Fjallaprædikan • Typing</title>
   <style>
     :root{
       --bg1: #0f172a;
@@ -14,6 +14,7 @@
       --muted: #94a3b8;
       --wrong: #ef4444;
       --ok: #22c55e;
+      --hinted: #93c5fd;
       --accent: #38bdf8;
       --accent2: #22c55e;
       --shadow: 0 20px 60px rgba(0,0,0,0.35);
@@ -225,6 +226,7 @@
     }
 
     .slot-display .ok { color: var(--text); }
+    .slot-display .hinted { color: var(--hinted); }
     .slot-display .bad {
       color: var(--wrong);
       text-decoration: underline;
@@ -244,7 +246,7 @@
       height: 100%;
       background: transparent;
       color: transparent;          /* hide native text */
-      caret-color: #fff;           /* but keep caret */
+      caret-color: #fff;           /* keep caret */
     }
 
     .slot-input::selection {
@@ -275,17 +277,18 @@
         <div class="left">
           <div class="badge">Matteus 5 • Fjallaprædikan</div>
           <div class="badge" id="mistakesBadge">Feilir: 0</div>
-          <div class="badge" id="slotsBadge">Kassar: 0</div>
+          <div class="badge" id="slotsBadge">Slots: 0</div>
         </div>
         <div class="btns">
-          <button class="primary" id="hintBtn" type="button">Hjálp</button>
-          <button id="clearBtn" type="button">Rudda</button>
+          <button class="primary" id="hintWordBtn" type="button">Hint (Word)</button>
+          <button class="primary" id="hintBoxBtn" type="button">Hint (Box)</button>
+          <button id="clearBtn" type="button">Clear</button>
         </div>
       </div>
 
       <div class="progress-wrap">
         <div class="progress-row">
-          <span id="progressText">0 / 0 kassar rættir á rað</span>
+          <span id="progressText">0 / 0 chars correct in sequence</span>
           <span id="percentText">0%</span>
         </div>
         <div class="bar"><div id="barFill"></div></div>
@@ -294,7 +297,7 @@
       <div class="verses" id="verses"></div>
 
       <div class="footer-note">
-        Vers og teknsetan er sett fyri teg. Skriva bert tekst.
+        Thomas Warner er GAY
       </div>
     </div>
   </div>
@@ -451,10 +454,11 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
     const progressText = document.getElementById('progressText');
     const percentText = document.getElementById('percentText');
     const barFill = document.getElementById('barFill');
-    const hintBtn = document.getElementById('hintBtn');
+    const hintWordBtn = document.getElementById('hintWordBtn');
+    const hintBoxBtn = document.getElementById('hintBoxBtn');
     const clearBtn = document.getElementById('clearBtn');
 
-    const slots = []; // {el,input,display,target,verseNo,index}
+    const slots = []; // {el,input,display,target,verseNo,index,hinted:Set<int>}
     const PUNCT = new Set([",",";",".",":","!","?","„","“","\"","–","*","(",")"]);
 
     function parseVerseText(raw) {
@@ -529,6 +533,48 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
       return normChar(a) === normChar(b);
     }
 
+    function isSlotFullyCorrect(slot) {
+      if (slot.input.value.length !== slot.target.length) return false;
+      for (let i = 0; i < slot.target.length; i++) {
+        if (!sameChar(slot.input.value[i], slot.target[i])) return false;
+      }
+      return true;
+    }
+
+    function firstIncompleteIndex(slot) {
+      const typed = slot.input.value;
+      const target = slot.target;
+      for (let i = 0; i < target.length; i++) {
+        if (i >= typed.length) return i;
+        if (!sameChar(typed[i], target[i])) return i;
+      }
+      return -1;
+    }
+
+    function setRangeToTarget(slot, start, end) {
+      const typed = slot.input.value;
+      const needLen = Math.max(typed.length, end);
+      const chars = new Array(needLen);
+
+      for (let i = 0; i < needLen; i++) {
+        if (i < typed.length) chars[i] = typed[i];
+        else chars[i] = ""; // temporary
+      }
+
+      // If we need to extend length, fill only the new part with target chars
+      for (let i = typed.length; i < needLen; i++) {
+        chars[i] = slot.target[i] ?? "";
+      }
+
+      // Apply revealed range
+      for (let i = start; i < end; i++) {
+        chars[i] = slot.target[i];
+        slot.hinted.add(i);
+      }
+
+      slot.input.value = chars.join("");
+    }
+
     function renderSlot(slot) {
       const typed = slot.input.value;
       const target = slot.target;
@@ -540,20 +586,21 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
       for (let i = 0; i < typed.length; i++) {
         const ok = i < target.length && sameChar(typed[i], target[i]);
         if (!ok) hasError = true;
-        html += `<span class="${ok ? "ok" : "bad"}">${visibleChar(typed[i])}</span>`;
+
+        let cls = "bad";
+        if (ok) cls = slot.hinted.has(i) ? "hinted" : "ok";
+
+        html += `<span class="${cls}">${visibleChar(typed[i])}</span>`;
       }
 
-      // optional faint placeholder "length hint"
+      // faint dots for remaining chars
       for (let i = typed.length; i < target.length; i++) {
         html += `<span class="ghost">${target[i] === " " ? "&nbsp;" : "·"}</span>`;
       }
 
-      // empty slot should still have height
       if (!html) html = "&nbsp;";
 
-      // if lengths differ, not complete
       if (typed.length !== target.length) completeCorrect = false;
-      // if same length but any mismatch, not complete
       if (hasError) completeCorrect = false;
 
       slot.display.innerHTML = html;
@@ -578,10 +625,9 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
           if (i >= target.length || !sameChar(typed[i], target[i])) mistakes++;
         }
 
-        // prefix correctness across slots in sequence
+        // correct prefix across all slots
         if (!prefixStopped) {
           const n = Math.min(typed.length, target.length);
-
           for (let i = 0; i < n; i++) {
             if (sameChar(typed[i], target[i])) {
               prefix++;
@@ -590,8 +636,6 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
               break;
             }
           }
-
-          // stop prefix if this slot isn't fully filled yet
           if (!prefixStopped && typed.length < target.length) {
             prefixStopped = true;
           }
@@ -601,14 +645,22 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
       const pct = totalChars ? Math.floor((prefix / totalChars) * 100) : 0;
       mistakesBadge.textContent = `Feilir: ${mistakes}`;
       slotsBadge.textContent = `Kassar: ${slots.length}`;
-      progressText.textContent = `${prefix} / ${totalChars} bókstavir rættir á rað`;
+      progressText.textContent = `${prefix} / ${totalChars} stavir rættir á rað`;
       percentText.textContent = `${pct}%`;
       barFill.style.width = `${pct}%`;
+    }
+
+    function focusSlot(slot, toEnd = true) {
+      slot.input.focus();
+      const pos = toEnd ? slot.input.value.length : 0;
+      slot.input.setSelectionRange(pos, pos);
+      slot.el.scrollIntoView({ block: "nearest", inline: "nearest" });
     }
 
     function buildUI() {
       const { verseNumbers, verses } = parseVerseText(rawTargetText);
       versesEl.innerHTML = "";
+      slots.length = 0;
 
       let slotCounter = 0;
 
@@ -660,7 +712,15 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
             slot.appendChild(input);
             line.appendChild(slot);
 
-            const slotObj = { el: slot, input, display, target: token.text, verseNo, index: slotCounter };
+            const slotObj = {
+              el: slot,
+              input,
+              display,
+              target: token.text,
+              verseNo,
+              index: slotCounter,
+              hinted: new Set()
+            };
             slots.push(slotObj);
             slotCounter++;
           }
@@ -671,20 +731,18 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
         versesEl.appendChild(row);
       }
 
-      // listeners
       for (let i = 0; i < slots.length; i++) {
         const current = slots[i];
         const next = slots[i + 1] || null;
         const prev = slots[i - 1] || null;
 
         current.input.addEventListener("input", () => {
-          // hard trim (maxlength should already do this)
           if (current.input.value.length > current.target.length) {
             current.input.value = current.input.value.slice(0, current.target.length);
           }
+
           renderAll();
 
-          // auto-jump when full
           if (next && current.input.value.length >= current.target.length) {
             next.input.focus();
             next.input.select();
@@ -692,18 +750,28 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
         });
 
         current.input.addEventListener("keydown", (e) => {
-          if (e.key === "Backspace" && current.input.selectionStart === 0 && current.input.selectionEnd === 0 && current.input.value.length === 0 && prev) {
+          if (e.key === "Backspace" &&
+              current.input.selectionStart === 0 &&
+              current.input.selectionEnd === 0 &&
+              current.input.value.length === 0 &&
+              prev) {
             e.preventDefault();
             prev.input.focus();
             prev.input.setSelectionRange(prev.input.value.length, prev.input.value.length);
           }
 
-          if (e.key === "ArrowLeft" && current.input.selectionStart === 0 && current.input.selectionEnd === 0 && prev) {
+          if (e.key === "ArrowLeft" &&
+              current.input.selectionStart === 0 &&
+              current.input.selectionEnd === 0 &&
+              prev) {
             prev.input.focus();
             prev.input.setSelectionRange(prev.input.value.length, prev.input.value.length);
           }
 
-          if (e.key === "ArrowRight" && current.input.selectionStart === current.input.value.length && current.input.selectionEnd === current.input.value.length && next) {
+          if (e.key === "ArrowRight" &&
+              current.input.selectionStart === current.input.value.length &&
+              current.input.selectionEnd === current.input.value.length &&
+              next) {
             next.input.focus();
             next.input.setSelectionRange(0, 0);
           }
@@ -718,7 +786,6 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
         });
 
         current.input.addEventListener("paste", (e) => {
-          // keep pastes local to one slot (clean/simple behavior)
           e.preventDefault();
           const txt = (e.clipboardData || window.clipboardData).getData("text");
           current.input.value = txt.slice(0, current.target.length);
@@ -730,35 +797,49 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
       if (slots[0]) slots[0].input.focus();
     }
 
-    function revealHint() {
-      // Fill the first slot that is not fully correct
+    function revealNextBox() {
       for (const slot of slots) {
-        const typed = slot.input.value;
-        const target = slot.target;
-
-        let fullyCorrect = typed.length === target.length;
-        if (fullyCorrect) {
-          for (let i = 0; i < target.length; i++) {
-            if (!sameChar(typed[i], target[i])) {
-              fullyCorrect = false;
-              break;
-            }
-          }
-        }
-
-        if (!fullyCorrect) {
-          slot.input.value = target;
+        if (!isSlotFullyCorrect(slot)) {
+          setRangeToTarget(slot, 0, slot.target.length);
           renderAll();
-          slot.input.focus();
-          slot.input.setSelectionRange(target.length, target.length);
-          slot.el.scrollIntoView({ block: "nearest", inline: "nearest" });
+          focusSlot(slot);
           return;
         }
       }
     }
 
+    function revealNextWord() {
+      for (const slot of slots) {
+        if (isSlotFullyCorrect(slot)) continue;
+
+        const idx = firstIncompleteIndex(slot);
+        if (idx === -1) continue;
+
+        const t = slot.target;
+        let start = idx;
+        let end = idx;
+
+        // If we're on spaces, reveal spaces + next word
+        if (t[start] === " ") {
+          while (end < t.length && t[end] === " ") end++;
+          while (end < t.length && t[end] !== " ") end++;
+        } else {
+          // Reveal current word until next space
+          while (end < t.length && t[end] !== " ") end++;
+        }
+
+        setRangeToTarget(slot, start, end);
+        renderAll();
+        focusSlot(slot);
+        return;
+      }
+    }
+
     function clearAll() {
-      for (const slot of slots) slot.input.value = "";
+      for (const slot of slots) {
+        slot.input.value = "";
+        slot.hinted.clear();
+      }
       renderAll();
       if (slots[0]) {
         slots[0].input.focus();
@@ -766,7 +847,8 @@ Tit skulu tí vera fullkomin, eins og himmalski Faðir tykkara er fullkomin.“`
       }
     }
 
-    hintBtn.addEventListener("click", revealHint);
+    hintWordBtn.addEventListener("click", revealNextWord);
+    hintBoxBtn.addEventListener("click", revealNextBox);
     clearBtn.addEventListener("click", clearAll);
 
     buildUI();
