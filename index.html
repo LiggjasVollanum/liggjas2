@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Digital CV for Líggjas av Vollanum — HA(mat.) student at Copenhagen Business School with interests in accounting, economics, data analysis, accounting and mathematical problem-solving." />
+  <meta name="description" content="Digital CV for Líggjas av Vollanum — HA(mat.) student at Copenhagen Business School with interests in business intelligence, economics, data analysis and mathematical problem-solving." />
   <title>Líggjas av Vollanum | Digital CV</title>
+
   <style>
     :root {
       --bg: #f4f1eb;
@@ -23,6 +24,7 @@
     }
 
     * { box-sizing: border-box; }
+
     html { scroll-behavior: smooth; }
 
     body {
@@ -34,7 +36,10 @@
       line-height: 1.55;
     }
 
-    a { color: inherit; text-decoration: none; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
     .shell {
       width: min(var(--max), calc(100% - 40px));
@@ -237,7 +242,11 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      position: relative;
+      z-index: 1;
     }
+
+    .portrait-frame img[src=""] { display: none; }
 
     .portrait-fallback {
       position: absolute;
@@ -251,9 +260,6 @@
       background: var(--accent-soft);
       z-index: 0;
     }
-
-    .portrait-frame img { position: relative; z-index: 1; }
-    .portrait-frame img[src=""] { display: none; }
 
     .quick-info {
       padding: 20px;
@@ -271,8 +277,15 @@
       font-size: 0.92rem;
     }
 
-    .info-line:last-child { border-bottom: 0; padding-bottom: 0; }
-    .info-line strong { color: var(--text); font-weight: 700; }
+    .info-line:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .info-line strong {
+      color: var(--text);
+      font-weight: 700;
+    }
 
     section { padding: 30px 0; }
 
@@ -347,6 +360,28 @@
     }
 
     .item:last-child { border-bottom: 0; }
+
+    .item.pending {
+      background: linear-gradient(135deg, var(--accent-soft), var(--surface));
+      border-left: 4px solid var(--accent);
+    }
+
+    .item.pending .date {
+      color: var(--accent);
+    }
+
+    .pending-note {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      color: var(--accent);
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
 
     .date {
       color: var(--gold);
@@ -523,7 +558,10 @@
       font-size: 0.9rem;
     }
 
-    .language-list { display: grid; gap: 0; }
+    .language-list {
+      display: grid;
+      gap: 0;
+    }
 
     .language {
       display: flex;
@@ -535,6 +573,7 @@
     }
 
     .language:last-child { border-bottom: 0; }
+
     .language strong { color: var(--text); }
 
     .footer {
@@ -545,35 +584,91 @@
     }
 
     @media (max-width: 900px) {
-      .hero, .grid-2, .projects, .section-head, .contact-revealed { grid-template-columns: 1fr; }
+      .hero,
+      .grid-2,
+      .projects,
+      .section-head,
+      .contact-revealed {
+        grid-template-columns: 1fr;
+      }
+
       .hero { padding-top: 36px; }
+
       .hero-main { min-height: auto; }
+
       .metrics { grid-template-columns: 1fr; }
+
       .nav-links { display: none; }
-      .item { grid-template-columns: 1fr; gap: 8px; }
+
+      .item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
     }
 
     @media (max-width: 560px) {
-      .shell, .nav-inner { width: min(100% - 24px, var(--max)); }
+      .shell,
+      .nav-inner {
+        width: min(100% - 24px, var(--max));
+      }
+
       .nav-inner { min-height: 60px; }
+
       .brand span:last-child { display: none; }
+
       .button { padding: 9px 11px; }
-      .hero-main, .content-card, .project, .contact-intro, .secure-contact { padding: 20px; }
+
+      .hero-main,
+      .content-card,
+      .project,
+      .contact-intro,
+      .secure-contact {
+        padding: 20px;
+      }
+
       .portrait-card { min-height: 280px; }
     }
 
     @media print {
-      body { background: #fff; color: #111; }
-      .nav, .hero-actions, .portrait-card, .secure-box { display: none; }
+      body {
+        background: #fff;
+        color: #111;
+      }
+
+      .nav,
+      .hero-actions,
+      .portrait-card,
+      .secure-box {
+        display: none;
+      }
+
       .shell { width: 100%; }
-      .hero, section { padding: 10px 0; }
-      .card { box-shadow: none; border-color: #ccc; }
-      .lead, .section-kicker, .item p, .language, .info-line { color: #333; }
+
+      .hero,
+      section {
+        padding: 10px 0;
+      }
+
+      .card {
+        box-shadow: none;
+        border-color: #ccc;
+      }
+
+      .lead,
+      .section-kicker,
+      .item p,
+      .language,
+      .info-line {
+        color: #333;
+      }
+
       .contact-revealed { display: grid; }
+
       .contact-card strong { color: #111; }
     }
   </style>
 </head>
+
 <body>
   <nav class="nav">
     <div class="nav-inner">
@@ -581,6 +676,7 @@
         <span class="mark">LV</span>
         <span>Líggjas av Vollanum</span>
       </a>
+
       <div class="nav-links" aria-label="Primary navigation">
         <a href="#profile">Profile</a>
         <a href="#education">Education</a>
@@ -588,6 +684,7 @@
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
       </div>
+
       <button class="button" onclick="window.print()">Print CV</button>
     </div>
   </nav>
@@ -597,18 +694,33 @@
       <div class="card hero-main">
         <div>
           <div class="eyebrow">HA(mat.) student · Economics · Mathematics · Data</div>
+
           <h1>Líggjas<br />av Vollanum</h1>
+
           <p class="lead">
-            Ambitious HA(mat.) student at CBS with a strong interest in business intelligence, data analysis and quantitative finance. @ CBS, I have developed a solid analytical foundation in economics, mathematics, statistics and problem-solving, while my upcoming role in TV 2’s Data & Insight team will give me practical exposure to data-driven decision-making and reporting. I am especially motivated by work that connects quantitative methods with real business insights, whether through BI tools, financial analysis or structured data analysis.
+            Ambitious HA(mat.) student at CBS with a strong interest in business intelligence, data analysis and quantitative finance. At CBS, I have developed a solid analytical foundation in economics, mathematics, statistics and problem-solving, while my upcoming role in TV 2’s Data & Insight team will give me practical exposure to data-driven decision-making and reporting. I am especially motivated by work that connects quantitative methods with real business insights, whether through BI tools, financial analysis or structured data analysis.
           </p>
+
           <div class="hero-actions">
             <a class="button" href="#experience">View experience</a>
           </div>
         </div>
+
         <div class="metrics" aria-label="Highlights">
-          <div class="metric"><strong>2027</strong><span>Expected BSc completion</span></div>
-          <div class="metric"><strong>14.9k</strong><span>YouTube subscribers</span></div>
-          <div class="metric"><strong>3.8M</strong><span>Total channel views</span></div>
+          <div class="metric">
+            <strong>2027</strong>
+            <span>Expected BSc completion</span>
+          </div>
+
+          <div class="metric">
+            <strong>14.9k</strong>
+            <span>YouTube subscribers</span>
+          </div>
+
+          <div class="metric">
+            <strong>3.8M</strong>
+            <span>Total channel views</span>
+          </div>
         </div>
       </div>
 
@@ -619,10 +731,22 @@
             <img src="images/profile.jpeg" alt="Portrait of Líggjas av Vollanum" onerror="this.style.display='none'" />
           </div>
         </div>
+
         <div class="card quick-info">
-          <div class="info-line"><strong>Institution</strong><span>Copenhagen Business School</span></div>
-          <div class="info-line"><strong>Location</strong><span>Frederiksberg, Denmark</span></div>
-          <div class="info-line"><strong>Focus</strong><span>Business, Mathematics and Econ</span></div>
+          <div class="info-line">
+            <strong>Institution</strong>
+            <span>Copenhagen Business School</span>
+          </div>
+
+          <div class="info-line">
+            <strong>Location</strong>
+            <span>Frederiksberg, Denmark</span>
+          </div>
+
+          <div class="info-line">
+            <strong>Focus</strong>
+            <span>Business, Mathematics and Economics</span>
+          </div>
         </div>
       </aside>
     </header>
@@ -630,15 +754,19 @@
     <section id="profile">
       <div class="section-head">
         <h2>Profile</h2>
-        <p class="section-kicker">A quantitative, execution-focused profile shaped by CBS coursework, work experience and hands-on project leadership.</p>
+        <p class="section-kicker">
+          A quantitative, execution-focused profile shaped by CBS coursework, work experience and hands-on project leadership.
+        </p>
       </div>
+
       <div class="grid-2">
         <div class="card content-card">
           <h3>Core skills</h3>
+
           <div class="skills" aria-label="Skills">
+            <span class="chip">Business intelligence</span>
             <span class="chip">Statistical models</span>
             <span class="chip">Mathematical problem-solving</span>
-            <span class="chip">AI tools</span>
             <span class="chip">Accounting understanding</span>
             <span class="chip">Project coordination</span>
             <span class="chip">Data analysis</span>
@@ -648,8 +776,10 @@
             <span class="chip">Compliance</span>
           </div>
         </div>
+
         <div class="card content-card">
           <h3>About</h3>
+
           <p class="section-kicker">
             I am a 24-year-old HA(mat.) student at CBS with a solid understanding of business intelligence, accounting, operations analysis and mathematical optimization. Through independent initiatives, I have developed the ability to take full ownership, drive results and deliver reliably in fast-paced environments.
           </p>
@@ -660,52 +790,123 @@
     <section id="education">
       <div class="section-head">
         <h2>Education</h2>
-        <p class="section-kicker">Business Administration, mathematics and analytical problem-solving.</p>
+        <p class="section-kicker">
+          Business administration, mathematics and analytical problem-solving.
+        </p>
       </div>
+
       <div class="card timeline">
         <article class="item">
           <div class="date">2024 — 2027</div>
+
           <div>
             <h3>HA(mat.) — Business Administration & Mathematics</h3>
-            <p>Copenhagen Business School. Focus on quantitative methods, business economics, accounting, optimization, data analysis and mathematical modelling.</p>
+            <p>
+              Copenhagen Business School. Focus on quantitative methods, business economics, accounting, optimization, data analysis and mathematical modelling.
+            </p>
           </div>
         </article>
+
         <article class="item">
           <div class="date">2027 — 2029</div>
+
           <div>
             <h3>Expected MSc: cand.merc.(mat.)</h3>
-            <p>Planned continuation into advanced economics, mathematics and quantitative business analysis.</p>
+            <p>
+              Planned continuation into advanced economics, mathematics and quantitative business analysis.
+            </p>
           </div>
         </article>
       </div>
     </section>
 
-   <section id="experience"> <div class="section-head"> <h2>Experience</h2> <p class="section-kicker"> Commercial, operational and high-responsibility experience across business and security environments. </p> </div> <div class="card timeline"> <article class="item pending"> <div class="date">From May 2026</div> <div> <span class="pending-note">Upcoming position</span> <h3>TV 2 Danmark — Student Assistant, Data & Insight</h3> <p> Incoming student assistant in TV 2’s Data & Insight team. The role will involve practical exposure to business intelligence, reporting and data-driven analysis, with an expected focus on tools such as SQL, Power BI, Excel and Adobe Analytics. As the position has not yet started, it is included as an upcoming professional experience rather than a completed role. </p> </div> </article> <article class="item"> <div class="date">2022 — 2024</div> <div> <h3>Vollabúðin Sp/F — Sales & Marketing</h3> <p> Worked with sales and marketing tasks in a broad retail company. Maintained ongoing contact and collaboration with suppliers, business customers and external partners. </p> </div> </article> <article class="item"> <div class="date">2020 — 2022</div> <div> <h3>ANSNI Trygdarfelag — Security Officer</h3> <p> Worked independently in responsible security roles involving ISPS security, counterterrorism security, tunnel surveillance and major national assignments. Coordinated with companies, authorities and event organizers to support safe and reliable operations. </p> </div> </article> </div> </section>
+    <section id="experience">
+      <div class="section-head">
+        <h2>Experience</h2>
+        <p class="section-kicker">
+          Commercial, operational and high-responsibility experience across business, data and security environments.
+        </p>
+      </div>
+
+      <div class="card timeline">
+        <article class="item pending">
+          <div class="date">From May 2026</div>
+
+          <div>
+            <span class="pending-note">Upcoming position</span>
+
+            <h3>TV 2 Danmark — Student Assistant, Data & Insight</h3>
+
+            <p>
+              Incoming student assistant in TV 2’s Data & Insight team. The role will involve practical exposure to business intelligence, reporting and data-driven analysis, with an expected focus on tools such as SQL, Power BI, Excel and Adobe Analytics. As the position has not yet started, it is included as an upcoming professional experience rather than a completed role.
+            </p>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="date">2022 — 2024</div>
+
+          <div>
+            <h3>Vollabúðin Sp/F — Sales & Marketing</h3>
+
+            <p>
+              Worked with sales and marketing tasks in a broad retail company. Maintained ongoing contact and collaboration with suppliers, business customers and external partners.
+            </p>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="date">2020 — 2022</div>
+
+          <div>
+            <h3>ANSNI Trygdarfelag — Security Officer</h3>
+
+            <p>
+              Worked independently in responsible security roles involving ISPS security, counterterrorism security, tunnel surveillance and major national assignments. Coordinated with companies, authorities and event organizers to support safe and reliable operations.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
 
     <section id="projects">
       <div class="section-head">
         <h2>Initiative projects</h2>
-        <p class="section-kicker">Self-started projects with measurable reach, creative leadership and full execution responsibility.</p>
+        <p class="section-kicker">
+          Self-started projects with measurable reach, creative leadership and full execution responsibility.
+        </p>
       </div>
+
       <div class="projects">
         <article class="card project">
           <div>
             <div class="eyebrow">Founder & project lead · 2021 — present</div>
+
             <h3>Zion’s Quartet</h3>
-            <p>Founded and lead a Southern Gospel quartet with releases on all major streaming platforms, several hundred physical CDs and live performances at festivals and larger events in the Faroe Islands. Responsible for production, coordination and planning.</p>
+
+            <p>
+              Founded and lead a Southern Gospel quartet with releases on all major streaming platforms, several hundred physical CDs and live performances at festivals and larger events in the Faroe Islands. Responsible for production, coordination and planning.
+            </p>
           </div>
+
           <div class="tags">
             <span class="tag">Leadership</span>
             <span class="tag">Production</span>
             <span class="tag">Coordination</span>
           </div>
         </article>
+
         <article class="card project">
           <div>
             <div class="eyebrow">Founder & project lead · 2019 — present</div>
+
             <h3>Music analysis YouTube channel</h3>
-            <p>Built an organic audience of approximately 14,900 subscribers and 3.7 million total views. Worked hands-on with audience understanding, performance analysis and digital growth.</p>
+
+            <p>
+              Built an organic audience of approximately 14,900 subscribers and 3.8 million total views. Worked hands-on with audience understanding, performance analysis and digital growth.
+            </p>
           </div>
+
           <div class="tags">
             <span class="tag">Analytics</span>
             <span class="tag">Digital growth</span>
@@ -719,11 +920,15 @@
       <div class="contact-section">
         <div class="card contact-intro">
           <div class="eyebrow">Contact</div>
+
           <h2>Contact information</h2>
+
           <h3>Available for analytical, quantitative and business-focused student opportunities.</h3>
+
           <p class="section-kicker">
             For relevant professional enquiries within data, finance, economics or business analysis, use the details below.
           </p>
+
           <p class="privacy-note">
             To reduce basic automated scraping on this static website, the email address and phone number are revealed after a simple human check.
           </p>
@@ -732,11 +937,13 @@
         <div class="card secure-contact">
           <div class="secure-box">
             <p>Complete the quick check to reveal the email address and phone number.</p>
+
             <div class="captcha-row">
               <label for="human-check">What is 7 + 4?</label>
               <input id="human-check" type="number" inputmode="numeric" autocomplete="off" aria-label="Human verification answer" />
               <button class="button primary" type="button" id="reveal-contact">Reveal contact</button>
             </div>
+
             <div class="status-message" id="contact-status" aria-live="polite"></div>
           </div>
 
@@ -745,6 +952,7 @@
               <span>Email</span>
               <strong id="email-text">Hidden</strong>
             </a>
+
             <a class="contact-card" id="phone-card" href="#" data-phone="+45 25 11 10 26">
               <span>Phone</span>
               <strong id="phone-text">Hidden</strong>
@@ -758,14 +966,28 @@
       <div class="grid-2">
         <div class="card content-card">
           <h2>Languages</h2>
+
           <div class="language-list" aria-label="Languages">
-            <div class="language"><strong>Faroese</strong><span>Native</span></div>
-            <div class="language"><strong>English</strong><span>Professional / fluent</span></div>
-            <div class="language"><strong>Danish</strong><span>Professional</span></div>
+            <div class="language">
+              <strong>Faroese</strong>
+              <span>Native</span>
+            </div>
+
+            <div class="language">
+              <strong>English</strong>
+              <span>Professional / fluent</span>
+            </div>
+
+            <div class="language">
+              <strong>Danish</strong>
+              <span>Professional</span>
+            </div>
           </div>
         </div>
+
         <div class="card content-card">
           <h2>Focus</h2>
+
           <p class="section-kicker">
             I am especially motivated by roles where structured analysis, data quality, financial understanding and clear communication meet practical business decisions.
           </p>
@@ -800,15 +1022,19 @@
 
       document.getElementById('email-text').textContent = email;
       document.getElementById('phone-text').textContent = phone;
+
       emailCard.href = `mailto:${email}`;
       phoneCard.href = `tel:${phone.replace(/\s/g, '')}`;
+
       contactDetails.classList.add('unlocked');
       contactStatus.textContent = 'Contact details unlocked.';
+
       revealButton.disabled = true;
       answerInput.disabled = true;
     }
 
     revealButton.addEventListener('click', unlockContact);
+
     answerInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') unlockContact();
     });
