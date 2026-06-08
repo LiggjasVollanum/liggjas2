@@ -428,6 +428,55 @@
       border-bottom: 1px solid var(--line);
     }
 
+
+    .figure-card img {
+      cursor: zoom-in;
+    }
+
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+      background: rgba(17, 24, 39, 0.86);
+      backdrop-filter: blur(8px);
+    }
+
+    .image-lightbox.active {
+      display: flex;
+    }
+
+    .image-lightbox img {
+      max-width: min(1200px, 96vw);
+      max-height: 88vh;
+      object-fit: contain;
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    .image-lightbox button {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 1.35rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .image-lightbox button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     .figure-fallback {
       display: none;
       min-height: 260px;
@@ -1812,6 +1861,10 @@ print("\nFigurer og tabeller er gemt i assets/-mappen.")</code></pre>
 <p>© <span id="year"></span> Líggjas av Vollanum. Kvantitativ aktieanalyse bygget som en statisk GitHub Pages-side.</p>
 </footer>
 </main>
+<div class="image-lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Forstørret figur">
+<button type="button" id="imageLightboxClose" aria-label="Luk forstørret figur">×</button>
+<img id="imageLightboxImg" src="" alt="" />
+</div>
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -1830,6 +1883,40 @@ print("\nFigurer og tabeller er gemt i assets/-mappen.")</code></pre>
         }
       });
     });
+
+    const imageLightbox = document.getElementById('imageLightbox');
+    const imageLightboxImg = document.getElementById('imageLightboxImg');
+    const imageLightboxClose = document.getElementById('imageLightboxClose');
+
+    document.querySelectorAll('.figure-card img').forEach((image) => {
+      image.addEventListener('click', () => {
+        imageLightboxImg.src = image.currentSrc || image.src;
+        imageLightboxImg.alt = image.alt || '';
+        imageLightbox.classList.add('active');
+        imageLightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    function closeImageLightbox() {
+      imageLightbox.classList.remove('active');
+      imageLightbox.setAttribute('aria-hidden', 'true');
+      imageLightboxImg.src = '';
+    }
+
+    imageLightboxClose.addEventListener('click', closeImageLightbox);
+
+    imageLightbox.addEventListener('click', (event) => {
+      if (event.target === imageLightbox) {
+        closeImageLightbox();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && imageLightbox.classList.contains('active')) {
+        closeImageLightbox();
+      }
+    });
+
   </script>
 </body>
 </html>
